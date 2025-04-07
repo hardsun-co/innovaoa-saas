@@ -1,0 +1,380 @@
+# project spec
+/apps/**/content/plugins
+./apps/**/content/themes/hsApp
+/manage/content/plugins
+
+./apps/ggsceramic/content/plugins
+./apps/ggsceramic/content/themes/hsApp
+./apps/design/content/plugins
+./apps/design/content/themes/hsApp
+./apps/szbjxk/content/plugins
+./apps/szddm/content/plugins
+./apps/szddm/content/themes/hsApp
+./apps/xmcera.hold/content/themes/hsApp
+./apps/xmaccent/content/plugins
+./apps/xmaccent/content/themes/hsApp
+./apps/magichina/content/plugins
+./apps/magichina/flatware/content/plugins
+./apps/magichina/ceramic-tile/content/plugins
+./apps/magichina/kitchen-cabinet/content/plugins
+./apps/magichina/cooking-appliance/content/plugins
+./apps/fsqjtech/content/plugins
+./apps/fsqjtech/content/themes/hsApp
+./apps/uniquecraft/content/plugins
+./apps/uniquecraft/content/themes/hsApp
+./apps/transtar-freight/content/plugins
+./apps/transtar-freight/content/themes/hsApp
+./apps/unitedpacking/content/plugins
+./apps/unitedpacking/content/themes/hsApp
+./apps/magiceramic/content/plugins
+./apps/xmcera/content/plugins/divi-builder.hold/*
+./apps/szbjxk/content/themes/hsApp/*
+./apps/jmakerpump/content/languages/admin-network-zh_CN.mo
+
+
+apps/**/app_info/app.json
+apps/**/data/app_info/app.json
+manage/data/app_info/app.json
+
+
+# demo app
+# /apps/demo-*
+
+### add all symlinks into gitingore
+# find . -type l >> .gitignore
+# https://stackoverflow.com/questions/8650871/telling-git-to-ignore-symlinks
+
+# ./includes/lib/wp-cli/vendor/bin/wp.bat
+# ./includes/lib/wp-cli/vendor/bin/wp
+# ./includes/lib/ics-parser/vendor/bin/carbon
+# ./includes/lib/pdfparser/vendor/bin/php-cs-fixer
+# ./includes/lib/pdfparser/vendor/bin/simple-phpunit
+# ./includes/lib/aliyun-openapi-sdk/vendor/bin/jp.php
+
+/index.html
+apps/**/index.html
+apps/**/*.html
+!apps/**/html/*.html
+!apps/**/template/2/index.html
+
+/includes
+/includes/*
+content/plugins/**includes/
+content/plugins/**/includes/*
+!apps/**/item/includes/*
+
+
+# WP
+wp-*.php
+!wp-cron.php
+wp-config.php
+wp-config*.php
+xmlrpc.php
+# wp-config-*.php
+**/wp-config.php
+apps/**/wp-config.php
+/wordpress
+readme.html
+
+wp-admin
+**/wp-admin
+**/wp-includes
+**/wp-content
+apps/**/wp-*.php
+apps/**/wp-admin
+apps/**/wp-includes
+apps/**/wp-content
+
+# assets
+assets/admin/media
+assets/admin/plugins
+assets/common/vendors
+assets/front/video
+assets/front/webfonts
+assets/front/vendor
+assets/front/svg
+assets/front/json
+assets/front/include
+assets/front/img
+assets/front/css/fonts
+# CI/CD
+/deploy
+/.ssh/config.sh
+# /scripts/init.sh
+/scripts/config.sh
+# /aws/scripts/config.sh
+
+# content/plugins
+# plugins/
+# **/plugins
+# /content/plugins/*
+# !/content/plugins/01-hs-common/
+
+# https://stackoverflow.com/questions/5533050/gitignore-exclude-folder-but-include-specific-subfolder
+**/content/plugins/*
+!**/content/plugins/01-hs-**/
+!**/content/plugins/01-hs-common/
+!**/content/plugins/01-hs-manage/
+!**/content/plugins/02-hs-projects/
+!**/content/plugins/hs-groupon/
+!**/content/plugins/hs-add-to-quote/
+!**/content/plugins/divi-builder/
+!**/content/plugins/kingdee/
+!**/content/plugins/kingdee/includes/
+!**/content/plugins/kingdee/includes/*
+!**/content/plugins/jwt-authentication-for-wp-rest-api-mod/
+
+!**/01-hs-**/*
+!**/01-hs-common/*
+!**/01-hs-manage/*
+!**/02-hs-projects/*
+!**/hs-groupon/*
+!**/hs-add-to-quote/*
+!**/kingdee/*
+!**/jwt-authentication-for-wp-rest-api-mod/*
+!**/divi-builder/*
+
+app/tsmf-system
+
+# **/plugins/divi-builder
+# **/plugins/divi-builder-old
+# **/plugins/divi-builder.hold/**
+# content/languages
+**/content/languages
+**/content/languages/*.po
+**/content/languages/*.mo
+
+**/themes/twentytwenty*
+
+
+/apps/**/themes/*
+!/apps/**/themes/hs/
+!/apps/**/themes/groupshop/
+!/apps/**/themes/groupshop*/
+!/apps/**/themes/fivestars/
+
+
+apps/**/themes/hsApp
+content/themes/hsApp.mac
+
+# et-cache/**
+content/et-cache
+**/et-cache
+**/content/et-cache
+# apps/combohome/content/et-cache/
+# apps/combohome/content/et-cache/*
+
+# 缓存文件
+**/content/advanced-cache.php
+**/content/advanced-cache*.php
+**/content/cache
+**/content/wphb-cache
+**/content/wp-rocket-config
+
+
+# /index.php
+
+# config
+/config.php
+/config*.php
+
+# uploads
+uploads/
+**/uploads
+
+# data files
+/data
+/data/*
+# !/data/admin/
+# !/data/fields/
+# !/data/app_info/
+
+# /data/local/*
+!/data/local/admin/
+!/data/local/fields/
+!/data/local/app_info/
+
+apps/**/data
+apps/**/data/*
+apps/**/data/staging/*
+# /manage/data/*
+# data/local
+# data/local
+**/local/items/*
+# **/data/local
+**/alibaba/
+# **/tools/alibaba/data/*
+# **/data/local/items/
+/bk
+bk/
+**/bk
+
+# redis 缓存文件
+object-cache.php
+
+# 项目用的库
+includes/lib
+/library
+/library/
+/library/*
+/library/acf/*
+library/acf/**
+
+# library/**/*
+
+# windowns shortcut link
+plugins.lnk
+includes.lnk
+
+
+/keys
+apps/**/keys
+
+# linux
+usr/
+.user.ini
+
+# Log files
+*.log
+
+# Package files
+*.jar
+
+
+# sublime text IDE
+*.sublime-workspace
+*.sublime-project
+
+# ST sftp config files
+sftp-config.json
+sftp-config*.json
+
+# VS Code IDE
+.vscode/
+.vscode/sftp*.json
+# .vscode/*
+*.code-workspace
+hsapp.code-workspace
+hsApp.code-workspace
+
+# JetBrains IDE
+.idea/
+
+# Unit test reports
+TEST*.xml
+
+# Generated by MacOS
+.DS_Store
+
+# Generated by Windows
+Thumbs.db
+
+# Applications
+*.app
+*.exe
+*.war
+
+# archives
+*.zip
+*.rar
+
+
+# db
+*.sql
+*.sqlite
+*.slq.*
+*.db
+
+# Large media files
+*.mp4
+*.tiff
+*.avi
+*.flv
+*.mov
+*.wmv
+*.psd
+*.ai
+
+# nginx/linux/key
+*.conf
+*.pem
+*.crt
+*.key
+*.cer
+*.csr
+*.ini
+
+# others
+.gitignore_*
+credentials
+mampinstaller
+.maintance
+
+# ref link: https://www.w3schools.com/git/git_ignore.asp
+apps/matacps/hsApp
+apps/matacps/languages
+apps/matacps/plugins
+# apps/combohome/data/local/fields/acf/post.txt
+/apps/**/data_**/*
+/apps/**/data_**/
+apps/**/data_**/
+install
+*.phar
+scripts/plugin-active.sh
+license.txt
+apps/**/license.txt
+
+# app-admin 是最新的系统的默认文件，用于手动升级或者bug修复
+apps/app-admin
+apps/app-admin/*
+apps/**/readme.html
+apps/groupshop
+
+/index.html
+apps/enshine/test/export/
+apps/enshine/test/xlsx/
+*.xlsx
+apps/demo3/test/xlsx/aaa.json
+*.hold
+apps/demo3/content/hsApp
+manage/data/staging/pickups/import.json
+manage/test/pickups.json
+apps/inlabs/app-configbk2.php
+
+# grunt
+Gruntfile.js
+gruntfile.js
+gruntfile.*
+
+# gulp
+gulpfile.js
+gulpfile.*
+
+# package.json
+package.json
+package-lock.json
+/library/acf
+apps/demo3/tools/innova/product-tax/json/export.json
+apps/lxhsupply/content/themes/hs/assets/wdrive_assets/
+
+apps/ic_2014/code/*
+apps/ic_2014/e/*
+apps/ic_2014/pdf/*
+apps/lxhsupply/test/html/
+
+# oa system
+innonew/hsapp
+innonew/hsapp/config-*.php
+innonew/hsapp/config.php
+innonew/hsapp/assets
+innonew/hsapp/library
+innonew/hsapp/includes/.git
+
+innonew/hsapp/apps/innovaoa/data/img/
+innonew/hsapp/apps/innovaoa/tools/oa-feedback/data/records/
+
+innonew/Innova_files/
+# innonew/hsapp/Innova_files
+apps/2innova/tools/oa-feedback/static/
+innonew/Innova.html
+/apps/ic_2014/library
