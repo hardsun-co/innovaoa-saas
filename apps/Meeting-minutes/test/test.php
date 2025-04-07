@@ -3,15 +3,18 @@
  * @Description: 
  * @Author: pjw@hardsun
  * @Date: 2025-04-03 10:09:08
- * @LastEditTime: 2025-04-03 18:17:18
+ * @LastEditTime: 2025-04-07 11:35:43
  * @LastEditors: pjw@hardsun
  * @FilePath: \Innovaoa\apps\Meeting-minutes\test\test.php
  * @Copyright: Copyright©2019-2025 HARDSUN TECH Ltd
  */
 
+
 require_once '../../../common/common.php';
+
 use Hs\Msdb;
 use Hs\Fmproject\Minutes;
+
 $minuteTable = new Minutes\Table();
 $minuteDetail = new Minutes\Detail();
 $minuteIndex = Minutes\Index::getInstance();
@@ -31,12 +34,12 @@ $minuteIndex = Minutes\Index::getInstance();
 // 四、关于news，（1）业务员提供了许多news，但内容浅显（仅大纲级）专业度不足，（2）周瑞提议新增一个产品模块，可直接跳转到不同的模块查看更加详细的资料；或增加视频图片，增加News的可读性"							
 
 // $data = [
-  // 'id' => 1,
-  // 'title' => '会议记录表1',
-  // 'theme' => '3月会议',
-  // 'host' => '叶子怡',
-  // 'recorder' => '叶子怡',
-  // 'date' => '2025-3-3',
+// 'id' => 1,
+// 'title' => '会议记录表1',
+// 'theme' => '3月会议',
+// 'host' => '叶子怡',
+// 'recorder' => '叶子怡',
+// 'date' => '2025-3-3',
 //   'attendees' => '林秋月、洪高艺、周瑞、叶子怡、罗蔡丽、Chris',
 //   'absentees' => '无',
 //   'absentee_reason' => '',
@@ -109,4 +112,4 @@ $minuteIndex->addDetail($data);
 // $msdb = Msdb\Index::getInstance();
 
 // var_dump($msdb->tableExists('TAB1'));
-// ?>
+// 
