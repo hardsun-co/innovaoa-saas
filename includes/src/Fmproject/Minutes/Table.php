@@ -3,7 +3,7 @@
  * @Description: 
  * @Author: pjw@hardsun
  * @Date: 2025-04-03 10:15:03
- * @LastEditTime: 2025-04-07 10:31:04
+ * @LastEditTime: 2025-04-07 12:04:37
  * @LastEditors: pjw@hardsun
  * @FilePath: \Innovaoa\includes\src\Fmproject\Minutes\table.php
  * @Copyright: Copyright©2019-2025 HARDSUN TECH Ltd
@@ -466,6 +466,57 @@ class Table extends \Hs\Data\Msdb\Common
     return $this->dataTypeSets;
   }
 
+  public function dbFieldExist($name = '')
+  {
+    if(empty($name)||!is_string($name)) return false;
+    $sql = "SELECT COUNT(*) FROM sys.columns WHERE object_id = OBJECT_ID('$this->table_name') AND name = '$name'";
+    $result = $this->msdb->getValue($sql);
+    if ($result > 0) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  public function addCol()
+  {
+    // if(!$this->dbFieldExist('title')) {
+    //   $sql = "ALTER TABLE $this->table_name ADD title NVARCHAR(255) NOT NULL DEFAULT ''";
+    //   $this->msdb->query($sql);
+    // }
+    // if(!$this->dbFieldExist('theme')) {
+    //   $sql = "ALTER TABLE $this->table_name ADD theme NVARCHAR(255) NOT NULL DEFAULT ''";
+    //   $this->msdb->query($sql);
+    // }
+    // if(!$this->dbFieldExist('host')) {
+    //   $sql = "ALTER TABLE $this->table_name ADD host NVARCHAR(255) NOT NULL DEFAULT ''";
+    //   $this->msdb->query($sql);
+    // }
+    // if(!$this->dbFieldExist('date')) {
+    //   $sql = "ALTER TABLE $this->table_name ADD date DATETIME NOT NULL DEFAULT GETDATE()";
+    //   $this->msdb->query($sql);
+    // }
+    // if(!$this->dbFieldExist('recorder')) {
+    //   $sql = "ALTER TABLE $this->table_name ADD recorder NVARCHAR(255) NOT NULL DEFAULT ''";
+    //   $this->msdb->query($sql);
+    // }
+    // if(!$this->dbFieldExist('participants')) {
+    //   $sql = "ALTER TABLE $this->table_name ADD participants NVARCHAR(MAX) NOT NULL DEFAULT ''";
+    //   $this->msdb->query($sql);
+    // }
+    // if(!$this->dbFieldExist('absentees')) {
+    //   $sql = "ALTER TABLE $this->table_name ADD absentees NVARCHAR(MAX) NOT NULL DEFAULT ''";
+    //   $this->msdb->query($sql);
+    // }
+    // if(!$this->dbFieldExist('absence_reason')) {
+    //   $sql = "ALTER TABLE $this->table_name ADD absence_reason NVARCHAR(MAX) NOT NULL DEFAULT ''";
+    //   $this->msdb->query($sql);
+    // }
+    // if(!$this->dbFieldExist('summary')) {
+    //   $sql = "ALTER TABLE $this->table_name ADD summary NVARCHAR(MAX) NOT NULL DEFAULT ''";
+    //   $this->msdb->query($sql);
+    // }
+  }
 
   //初始化函数
   public function init()
