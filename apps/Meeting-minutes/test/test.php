@@ -3,7 +3,7 @@
  * @Description: 
  * @Author: pjw@hardsun
  * @Date: 2025-04-03 10:09:08
- * @LastEditTime: 2025-04-07 11:35:43
+ * @LastEditTime: 2025-04-08 16:10:15
  * @LastEditors: pjw@hardsun
  * @FilePath: \Innovaoa\apps\Meeting-minutes\test\test.php
  * @Copyright: Copyright©2019-2025 HARDSUN TECH Ltd
@@ -18,6 +18,14 @@ use Hs\Fmproject\Minutes;
 $minuteTable = new Minutes\Table();
 $minuteDetail = new Minutes\Detail();
 $minuteIndex = Minutes\Index::getInstance();
+
+$params = [
+  's' => '叶子'
+];
+$minuteIndex->getItems($params);
+hs_ve($minuteIndex->getItems($params));
+
+exit;
 
 // hs_ve($minuteIndex->delete(['id'=>1]));
 // hs_ve($minuteIndex->getItems(['id'=>1]));

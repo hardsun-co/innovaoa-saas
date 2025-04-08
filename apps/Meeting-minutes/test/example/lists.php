@@ -41,6 +41,9 @@ $minuteApi = '/innonew/hsapp/apps/meeting-minutes/test/example/api/minute.php';
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>会议记录管理系统</title>
   <!-- CSS & JS -->
+   
+  <!-- Font Awesome 图标库 -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
   <link href="https://2innova.hardsun.cn/tools/oa-feedback/static/css/bootstrap.min.css" rel="stylesheet" type="text/css">
 
   <link href="https://hardsun.cn/assets/common/vendors/general/toastr/build/toastr.css" rel="stylesheet" type="text/css">
@@ -57,8 +60,6 @@ $minuteApi = '/innonew/hsapp/apps/meeting-minutes/test/example/api/minute.php';
 
   <!-- Bootstrap CSS -->
   <!-- <link href="https://cdn.jsdelivr.net/npm/bootstrap@3.4.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet"> -->
-  <!-- Font Awesome 图标库 -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
   <style>
     .hs-meeting-row {
       cursor: pointer;
