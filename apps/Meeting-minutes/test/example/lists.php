@@ -426,7 +426,7 @@ $minuteApi = 'http://innovaoaloc.cn/apps/meeting-minutes/test/example/minuteapi.
                 <?php foreach ($minutes['items'] as $index => $meeting): ?>
                   <!-- 会议记录行 -->
                   <tr class="hs-meeting-row" data-meeting-id="<?php echo $meeting['id']; ?>">
-                    <td><?php echo $meeting['id']; ?></td>
+                    <td><?php echo $index+1; ?></td>
                     <td>
                       <div class="hs-align-items-center">
                         <i class="fa fa-chevron-down hs-expand-icon hs-margin-right-10"></i>
