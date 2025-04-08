@@ -1,0 +1,1773 @@
+
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>会议记录管理系统</title>
+  <!-- CSS & JS -->
+  <link href="https://2innova.hardsun.cn/tools/oa-feedback/static/css/bootstrap.min.css" rel="stylesheet" type="text/css">
+
+  <link href="https://hardsun.cn/assets/common/vendors/general/toastr/build/toastr.css" rel="stylesheet" type="text/css">
+  <!--end:: COMMON STYLES -->
+
+
+  <link href="https://hardsun.cn/assets/common/css/main.min.css" rel="stylesheet" type="text/css">
+
+
+  <!-- oa feedback form css -->
+  <link href="https://2innova.hardsun.cn/tools/oa-feedback/static/css/main.min.css" rel="stylesheet" type="text/css" />
+
+
+
+  <!-- Bootstrap CSS -->
+  <!-- <link href="https://cdn.jsdelivr.net/npm/bootstrap@3.4.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet"> -->
+  <!-- Font Awesome 图标库 -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <style>
+    .hs-meeting-row {
+      cursor: pointer;
+    }
+
+    .hs-meeting-detail {
+      display: none;
+      background-color: #f8f9fa;
+    }
+
+    .hs-detail-container {
+      padding: 15px;
+      border-top: 1px solid #dee2e6;
+    }
+
+    .hs-expand-icon {
+      transition: transform 0.3s;
+    }
+
+    .hs-rotate-icon {
+      transform: rotate(180deg);
+    }
+
+    .hs-detail-row {
+      margin-bottom: 8px;
+      border-left: 3px solid #6c757d;
+      padding-left: 15px;
+    }
+
+    .hs-empty-details {
+      padding: 20px;
+      text-align: center;
+      color: #6c757d;
+    }
+
+    .hs-meeting-date {
+      width: 120px;
+    }
+
+    .hs-meeting-title {
+      font-weight: 500;
+    }
+
+    .hs-actions-column {
+      width: 100px;
+    }
+
+    /* .hs-badge {
+      font-size: 85%;
+    } */
+
+    /* 分页样式增强 */
+    .hs-pagination {
+      margin-bottom: 0;
+      padding-left: 0;
+    }
+
+    .hs-pagination>li {
+      display: inline-block;
+    }
+
+    .hs-pagination>li>a,
+    .hs-pagination>li>span {
+      padding: 6px 12px;
+      border: 1px solid #ddd;
+      margin-left: -1px;
+      float: left;
+      text-decoration: none;
+      background-color: #fff;
+      color: #337ab7;
+    }
+
+    .hs-pagination>.active>a {
+      background-color: #337ab7;
+      color: white;
+      border-color: #337ab7;
+    }
+
+    .hs-pagination>.disabled>a,
+    .hs-pagination>.disabled>span {
+      color: #777;
+      cursor: not-allowed;
+    }
+
+    .hs-page-info {
+      color: #6c757d;
+    }
+
+    .hs-pagination-container {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 20px;
+      flex-wrap: wrap;
+    }
+
+    /* Bootstrap 3.4 兼容样式 */
+    .hs-btn-sm {
+      padding: 5px 10px;
+      font-size: 12px;
+    }
+
+    .hs-margin-right-5 {
+      margin-right: 5px;
+    }
+
+    .hs-margin-left-5 {
+      margin-left: 5px;
+    }
+
+    .hs-margin-bottom-15 {
+      margin-bottom: 15px;
+    }
+
+    .hs-padding-0 {
+      padding: 0;
+    }
+
+    .flex-container {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+
+    /* 替代 d-flex */
+    .hs-flex {
+      display: flex;
+    }
+
+    .hs-align-items-center {
+      display: flex;
+      align-items: center;
+    }
+
+    .hs-text-danger {
+      color: #d9534f;
+    }
+
+    .hs-text-muted {
+      color: #777;
+    }
+
+    /* Toast 通知样式 */
+    .hs-toast-container {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      z-index: 9999;
+    }
+
+    .hs-small {
+      font-size: 85%;
+    }
+
+    @media (max-width: 768px) {
+      .hs-pagination-container {
+        flex-direction: column;
+        gap: 10px;
+      }
+    }
+
+    .hs-header-row {
+      display: flex;
+      align-items: flex-end;
+      /* 垂直底部对齐 */
+      justify-content: space-between;
+      margin-bottom: 15px;
+    }
+
+    .hs-header-title {
+      flex: 1;
+    }
+
+    .hs-header-actions {
+      text-align: right;
+      align-self: flex-end;
+      /* 确保在底部 */
+    }
+
+    /* 添加基本网格系统 */
+    .hs-row {
+      display: flex;
+      flex-wrap: wrap;
+      margin-right: -15px;
+      margin-left: -15px;
+      width: 100%;
+    }
+
+    .hs-col-xs-12,
+    .hs-col-sm-4,
+    .hs-col-md-6 {
+      position: relative;
+      min-height: 1px;
+      padding-right: 15px;
+      padding-left: 15px;
+    }
+
+    /* 移动设备优先，小屏幕占满宽度 */
+    .hs-col-xs-6 {
+      width: 50%;
+      float: left;
+    }
+
+    .hs-col-xs-12 {
+      width: 100%;
+      float: left;
+    }
+
+    /* 中等屏幕尺寸 */
+    @media (min-width: 768px) {
+      .hs-col-sm-4 {
+        width: 33.33333333%;
+        float: left;
+      }
+    }
+
+    /* 文字对齐 */
+    .hs-text-center {
+      text-align: center;
+    }
+
+    .hs-text-right {
+      text-align: right;
+    }
+
+    /* 模态框表单样式修复 */
+    .hs-form-horizontal .hs-form-group {
+      display: flex;
+      flex-wrap: wrap;
+      margin-right: -15px;
+      margin-left: -15px;
+      margin-bottom: 15px;
+    }
+
+    .hs-form-horizontal .hs-control-label {
+      padding-top: 7px;
+      margin-bottom: 0;
+      text-align: right;
+    }
+
+    .hs-modal-dialog {
+      width: 90%;
+      max-width: 900px; /* 根据需要调整 */
+      margin: 30px auto;
+    }
+
+    .hs-modal-lg {
+      width: 90%;
+      max-width: 900px;
+    }
+
+    .hs-modal-content {
+      padding: 20px;
+    }
+
+    .hs-modal-header {
+      padding: 15px;
+      border-bottom: 1px solid #e5e5e5;
+      position: relative;
+      min-height: 16.42px;  /* 确保有足够高度容纳关闭按钮 */
+    }
+
+    .hs-modal-header .hs-close {
+      position: absolute;
+      right: 15px;
+      top: 15px;
+      margin-top: 0;
+    }
+
+    .hs-modal-title {
+      margin: 0;
+      line-height: 1.42857143;
+    }
+
+    /* 确保modal-body类与hs-modal-body保持一致 */
+    .modal-body {
+      position: relative;
+      padding: 15px;
+    }
+
+    /* 确保modal-footer类与hs-modal-footer保持一致 */
+    .modal-footer {
+      padding: 15px;
+      text-align: right;
+      border-top: 1px solid #e5e5e5;
+    }
+    /* 在CSS中添加或修改以下样式 */
+    .hs-modal-header {
+      padding: 15px;
+      border-bottom: 1px solid #e5e5e5;
+      position: relative;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    /* .hs-close {
+      float: right;
+      font-size: 21px;
+      font-weight: bold;
+      line-height: 1;
+      color: #000;
+      text-shadow: 0 1px 0 #fff;
+      opacity: .2;
+      background: none;
+      border: none;
+      padding: 0;
+      cursor: pointer;
+    }
+
+    .hs-close:hover {
+      opacity: .5;
+    } */
+
+    .hs-margin-right-10 {
+      margin-right: 10px; /* 增加边距 */
+    }
+
+    /* 优化箭头图标显示 */
+    .hs-expand-icon {
+      font-size: 14px;    /* 适当调整图标大小 */
+      width: 16px;        /* 固定宽度 */
+      text-align: center; /* 居中对齐 */
+      color: #337ab7;     /* 使用主色调 */
+    }
+
+    /* 改进会议记录主题和标题样式 */
+    .hs-meeting-title {
+      font-weight: 500;
+      margin-left: 2px;   /* 微调左边距 */
+    }
+  </style>
+</head>
+
+<body>
+  <div class="hs-container-fluid" style="margin-top: 20px; margin-bottom: 30px;">
+    <div class="hs-header-row">
+      <div class="hs-header-title">
+        <h2>会议记录管理</h2>
+      </div>
+      <div class="hs-header-actions">
+        <a href="single.php" class="hs-btn hs-btn-primary">
+          <i class="fa fa-plus margin-right-5"></i> 新建会议
+        </a>
+      </div>
+    </div>
+
+    <div class="hs-panel hs-panel-default">
+      <div class="hs-panel-body">
+        <div class="hs-table-responsive">
+          <table class="hs-table hs-table-hover">
+            <thead>
+              <tr>
+                <th scope="col" width="50">#</th>
+                <th scope="col">会议记录</th>
+                <th scope="col" width="120">日期</th>
+                <th scope="col" width="100">主持人</th>
+                <th scope="col" width="100">操作</th>
+                <th scope="col" width="60">明细</th>
+              </tr>
+            </thead>
+            <tbody>
+                                                <!-- 会议记录行 -->
+                  <tr class="hs-meeting-row" data-meeting-id="10">
+                    <td>10</td>
+                    <td>
+                      <div class="hs-align-items-center">
+                        <i class="fa fa-chevron-down hs-expand-icon hs-margin-right-10"></i>
+                        <div>
+                          <span class="hs-meeting-title">4月会议</span>
+                          <div class="hs-small hs-text-muted">da</div>
+                        </div>
+                      </div>
+                    </td>
+                    <td class="hs-meeting-date">2025-04-03</td>
+                    <td>测试</td>
+                    <td>
+                      <div class="hs-flex">
+                        <a href="single.php?meeting_id=10" class="hs-btn hs-btn-sm hs-btn-primary margin-right-5" title="编辑">
+                          <i class="fas fa-edit"></i>
+                        </a>
+                        <button class="hs-btn hs-btn-sm hs-btn-danger delete-meeting-btn" data-meeting-id="10" title="删除">
+                          <i class="fas fa-trash"></i>
+                        </button>
+                      </div>
+                    </td>
+                    <td>
+                      <span class="hs-label hs-label-primary">
+                        1项
+                      </span>
+                    </td>
+                  </tr>
+
+                  <!-- 会议明细展开区域 -->
+                  <tr class="hs-meeting-detail" id="details-10">
+                    <td colspan="6" class="hs-padding-0">
+                      <div class="hs-detail-container">
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
+                          <div>
+                            <h5 style="margin-top: 0; margin-bottom: 0;">会议明细</h5>
+                          </div>
+                          <div>
+                            <button class="hs-btn hs-btn-sm hs-btn-success add-detail-btn"
+                              data-meeting-id="10">
+                              <i class="fas fa-plus"></i> 添加明细
+                            </button>
+                          </div>
+                        </div>
+
+                        <!-- 会议摘要信息 -->
+                        <div class="hs-panel hs-panel-default hs-margin-bottom-15">
+                          <div class="hs-panel-heading">
+                            会议信息
+                          </div>
+                          <div class="hs-panel-body">
+                            <table style="width:100%">
+                              <tr>
+                                <td style="width:50%; vertical-align:top; padding-right:15px;">
+                                  <p><strong>记录人：</strong> 测试</p>
+                                  <p><strong>参会人员：</strong> a</p>
+                                  <p><strong>缺席人员：</strong> a</p>
+                                </td>
+                                <td style="width:50%; vertical-align:top;">
+                                  <p><strong>会议总结：</strong></p>
+                                  <div class="hs-well" style="max-height:150px; overflow-y:auto">
+                                    wu                                  </div>
+                                </td>
+                              </tr>
+                            </table>
+                          </div>
+                        </div>
+
+                        <!-- 明细列表 -->
+                                                  <div class="hs-table-responsive">
+                            <table class="hs-table">
+                              <thead>
+                                <tr>
+                                  <th>责任人</th>
+                                  <th>会议内容</th>
+                                  <th>解决方案</th>
+                                  <th class="hs-actions-column">操作</th>
+                                </tr>
+                              </thead>
+                              <tbody>
+                                                                  <tr class="hs-detail-item" data-detail-id="15">
+                                    <td>
+                                      <strong>cs</strong>
+                                                                              <div class="hs-small hs-text-muted">IT部</div>
+                                                                          </td>
+                                    <td>
+                                      <div style="white-space:pre-line">
+                                        s                                      </div>
+                                    </td>
+                                    <td>
+                                      <div style="white-space:pre-line">
+                                        s                                      </div>
+                                                                              <div class="hs-text-muted hs-small hs-margin-top-5">
+                                          <i class="fas fa-calendar"></i> 计划完成:
+                                          cs                                        </div>
+                                                                          </td>
+                                    <td>
+                                      <div class="hs-flex">
+                                        <button class="hs-btn hs-btn-sm hs-btn-primary hs-margin-right-5 edit-detail-btn"
+                                          data-detail-id="15"
+                                          data-meeting-id="10">
+                                          <i class="fas fa-edit"></i>
+                                        </button>
+                                        <button class="hs-btn hs-btn-sm hs-btn-danger delete-detail-btn"
+                                          data-detail-id="15">
+                                          <i class="fas fa-trash"></i>
+                                        </button>
+                                      </div>
+                                    </td>
+                                  </tr>
+                                                              </tbody>
+                            </table>
+                          </div>
+                                              </div>
+                    </td>
+                  </tr>
+                                  <!-- 会议记录行 -->
+                  <tr class="hs-meeting-row" data-meeting-id="8">
+                    <td>8</td>
+                    <td>
+                      <div class="hs-align-items-center">
+                        <i class="fa fa-chevron-down hs-expand-icon hs-margin-right-10"></i>
+                        <div>
+                          <span class="hs-meeting-title">4月会议</span>
+                          <div class="hs-small hs-text-muted">会议记录表</div>
+                        </div>
+                      </div>
+                    </td>
+                    <td class="hs-meeting-date">2025-04-07</td>
+                    <td>测试</td>
+                    <td>
+                      <div class="hs-flex">
+                        <a href="single.php?meeting_id=8" class="hs-btn hs-btn-sm hs-btn-primary margin-right-5" title="编辑">
+                          <i class="fas fa-edit"></i>
+                        </a>
+                        <button class="hs-btn hs-btn-sm hs-btn-danger delete-meeting-btn" data-meeting-id="8" title="删除">
+                          <i class="fas fa-trash"></i>
+                        </button>
+                      </div>
+                    </td>
+                    <td>
+                      <span class="hs-label hs-label-primary">
+                        1项
+                      </span>
+                    </td>
+                  </tr>
+
+                  <!-- 会议明细展开区域 -->
+                  <tr class="hs-meeting-detail" id="details-8">
+                    <td colspan="6" class="hs-padding-0">
+                      <div class="hs-detail-container">
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
+                          <div>
+                            <h5 style="margin-top: 0; margin-bottom: 0;">会议明细</h5>
+                          </div>
+                          <div>
+                            <button class="hs-btn hs-btn-sm hs-btn-success add-detail-btn"
+                              data-meeting-id="8">
+                              <i class="fas fa-plus"></i> 添加明细
+                            </button>
+                          </div>
+                        </div>
+
+                        <!-- 会议摘要信息 -->
+                        <div class="hs-panel hs-panel-default hs-margin-bottom-15">
+                          <div class="hs-panel-heading">
+                            会议信息
+                          </div>
+                          <div class="hs-panel-body">
+                            <table style="width:100%">
+                              <tr>
+                                <td style="width:50%; vertical-align:top; padding-right:15px;">
+                                  <p><strong>记录人：</strong> 测试</p>
+                                  <p><strong>参会人员：</strong> 无记录</p>
+                                  <p><strong>缺席人员：</strong> 无</p>
+                                </td>
+                                <td style="width:50%; vertical-align:top;">
+                                  <p><strong>会议总结：</strong></p>
+                                  <div class="hs-well" style="max-height:150px; overflow-y:auto">
+                                    无                                  </div>
+                                </td>
+                              </tr>
+                            </table>
+                          </div>
+                        </div>
+
+                        <!-- 明细列表 -->
+                                                  <div class="hs-table-responsive">
+                            <table class="hs-table">
+                              <thead>
+                                <tr>
+                                  <th>责任人</th>
+                                  <th>会议内容</th>
+                                  <th>解决方案</th>
+                                  <th class="hs-actions-column">操作</th>
+                                </tr>
+                              </thead>
+                              <tbody>
+                                                                  <tr class="hs-detail-item" data-detail-id="10">
+                                    <td>
+                                      <strong>洪高艺</strong>
+                                                                              <div class="hs-small hs-text-muted">IT部</div>
+                                                                          </td>
+                                    <td>
+                                      <div style="white-space:pre-line">
+                                        ada                                      </div>
+                                    </td>
+                                    <td>
+                                      <div style="white-space:pre-line">
+                                        adadd                                      </div>
+                                                                              <div class="hs-text-muted hs-small hs-margin-top-5">
+                                          <i class="fas fa-calendar"></i> 计划完成:
+                                          展会前                                        </div>
+                                                                          </td>
+                                    <td>
+                                      <div class="hs-flex">
+                                        <button class="hs-btn hs-btn-sm hs-btn-primary hs-margin-right-5 edit-detail-btn"
+                                          data-detail-id="10"
+                                          data-meeting-id="8">
+                                          <i class="fas fa-edit"></i>
+                                        </button>
+                                        <button class="hs-btn hs-btn-sm hs-btn-danger delete-detail-btn"
+                                          data-detail-id="10">
+                                          <i class="fas fa-trash"></i>
+                                        </button>
+                                      </div>
+                                    </td>
+                                  </tr>
+                                                              </tbody>
+                            </table>
+                          </div>
+                                              </div>
+                    </td>
+                  </tr>
+                                  <!-- 会议记录行 -->
+                  <tr class="hs-meeting-row" data-meeting-id="7">
+                    <td>7</td>
+                    <td>
+                      <div class="hs-align-items-center">
+                        <i class="fa fa-chevron-down hs-expand-icon hs-margin-right-10"></i>
+                        <div>
+                          <span class="hs-meeting-title">4月会议</span>
+                          <div class="hs-small hs-text-muted">会议记录表</div>
+                        </div>
+                      </div>
+                    </td>
+                    <td class="hs-meeting-date">2025-04-07</td>
+                    <td>测试</td>
+                    <td>
+                      <div class="hs-flex">
+                        <a href="single.php?meeting_id=7" class="hs-btn hs-btn-sm hs-btn-primary margin-right-5" title="编辑">
+                          <i class="fas fa-edit"></i>
+                        </a>
+                        <button class="hs-btn hs-btn-sm hs-btn-danger delete-meeting-btn" data-meeting-id="7" title="删除">
+                          <i class="fas fa-trash"></i>
+                        </button>
+                      </div>
+                    </td>
+                    <td>
+                      <span class="hs-label hs-label-primary">
+                        1项
+                      </span>
+                    </td>
+                  </tr>
+
+                  <!-- 会议明细展开区域 -->
+                  <tr class="hs-meeting-detail" id="details-7">
+                    <td colspan="6" class="hs-padding-0">
+                      <div class="hs-detail-container">
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
+                          <div>
+                            <h5 style="margin-top: 0; margin-bottom: 0;">会议明细</h5>
+                          </div>
+                          <div>
+                            <button class="hs-btn hs-btn-sm hs-btn-success add-detail-btn"
+                              data-meeting-id="7">
+                              <i class="fas fa-plus"></i> 添加明细
+                            </button>
+                          </div>
+                        </div>
+
+                        <!-- 会议摘要信息 -->
+                        <div class="hs-panel hs-panel-default hs-margin-bottom-15">
+                          <div class="hs-panel-heading">
+                            会议信息
+                          </div>
+                          <div class="hs-panel-body">
+                            <table style="width:100%">
+                              <tr>
+                                <td style="width:50%; vertical-align:top; padding-right:15px;">
+                                  <p><strong>记录人：</strong> 测试</p>
+                                  <p><strong>参会人员：</strong> 无记录</p>
+                                  <p><strong>缺席人员：</strong> 无</p>
+                                </td>
+                                <td style="width:50%; vertical-align:top;">
+                                  <p><strong>会议总结：</strong></p>
+                                  <div class="hs-well" style="max-height:150px; overflow-y:auto">
+                                    无                                  </div>
+                                </td>
+                              </tr>
+                            </table>
+                          </div>
+                        </div>
+
+                        <!-- 明细列表 -->
+                                                  <div class="hs-table-responsive">
+                            <table class="hs-table">
+                              <thead>
+                                <tr>
+                                  <th>责任人</th>
+                                  <th>会议内容</th>
+                                  <th>解决方案</th>
+                                  <th class="hs-actions-column">操作</th>
+                                </tr>
+                              </thead>
+                              <tbody>
+                                                                  <tr class="hs-detail-item" data-detail-id="11">
+                                    <td>
+                                      <strong>洪高艺</strong>
+                                                                              <div class="hs-small hs-text-muted">IT部</div>
+                                                                          </td>
+                                    <td>
+                                      <div style="white-space:pre-line">
+                                        ad                                      </div>
+                                    </td>
+                                    <td>
+                                      <div style="white-space:pre-line">
+                                        dd                                      </div>
+                                                                              <div class="hs-text-muted hs-small hs-margin-top-5">
+                                          <i class="fas fa-calendar"></i> 计划完成:
+                                          展会前                                        </div>
+                                                                          </td>
+                                    <td>
+                                      <div class="hs-flex">
+                                        <button class="hs-btn hs-btn-sm hs-btn-primary hs-margin-right-5 edit-detail-btn"
+                                          data-detail-id="11"
+                                          data-meeting-id="7">
+                                          <i class="fas fa-edit"></i>
+                                        </button>
+                                        <button class="hs-btn hs-btn-sm hs-btn-danger delete-detail-btn"
+                                          data-detail-id="11">
+                                          <i class="fas fa-trash"></i>
+                                        </button>
+                                      </div>
+                                    </td>
+                                  </tr>
+                                                              </tbody>
+                            </table>
+                          </div>
+                                              </div>
+                    </td>
+                  </tr>
+                                  <!-- 会议记录行 -->
+                  <tr class="hs-meeting-row" data-meeting-id="6">
+                    <td>6</td>
+                    <td>
+                      <div class="hs-align-items-center">
+                        <i class="fa fa-chevron-down hs-expand-icon hs-margin-right-10"></i>
+                        <div>
+                          <span class="hs-meeting-title">4月会议</span>
+                          <div class="hs-small hs-text-muted">会议记录表</div>
+                        </div>
+                      </div>
+                    </td>
+                    <td class="hs-meeting-date">2025-04-07</td>
+                    <td>测试</td>
+                    <td>
+                      <div class="hs-flex">
+                        <a href="single.php?meeting_id=6" class="hs-btn hs-btn-sm hs-btn-primary margin-right-5" title="编辑">
+                          <i class="fas fa-edit"></i>
+                        </a>
+                        <button class="hs-btn hs-btn-sm hs-btn-danger delete-meeting-btn" data-meeting-id="6" title="删除">
+                          <i class="fas fa-trash"></i>
+                        </button>
+                      </div>
+                    </td>
+                    <td>
+                      <span class="hs-label hs-label-primary">
+                        0项
+                      </span>
+                    </td>
+                  </tr>
+
+                  <!-- 会议明细展开区域 -->
+                  <tr class="hs-meeting-detail" id="details-6">
+                    <td colspan="6" class="hs-padding-0">
+                      <div class="hs-detail-container">
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
+                          <div>
+                            <h5 style="margin-top: 0; margin-bottom: 0;">会议明细</h5>
+                          </div>
+                          <div>
+                            <button class="hs-btn hs-btn-sm hs-btn-success add-detail-btn"
+                              data-meeting-id="6">
+                              <i class="fas fa-plus"></i> 添加明细
+                            </button>
+                          </div>
+                        </div>
+
+                        <!-- 会议摘要信息 -->
+                        <div class="hs-panel hs-panel-default hs-margin-bottom-15">
+                          <div class="hs-panel-heading">
+                            会议信息
+                          </div>
+                          <div class="hs-panel-body">
+                            <table style="width:100%">
+                              <tr>
+                                <td style="width:50%; vertical-align:top; padding-right:15px;">
+                                  <p><strong>记录人：</strong> 测试</p>
+                                  <p><strong>参会人员：</strong> 无记录</p>
+                                  <p><strong>缺席人员：</strong> 无</p>
+                                </td>
+                                <td style="width:50%; vertical-align:top;">
+                                  <p><strong>会议总结：</strong></p>
+                                  <div class="hs-well" style="max-height:150px; overflow-y:auto">
+                                    无                                  </div>
+                                </td>
+                              </tr>
+                            </table>
+                          </div>
+                        </div>
+
+                        <!-- 明细列表 -->
+                                                  <div class="hs-empty-details">
+                            <p><i class="fas fa-info-circle me-2"></i>暂无明细记录</p>
+                          </div>
+                                              </div>
+                    </td>
+                  </tr>
+                                  <!-- 会议记录行 -->
+                  <tr class="hs-meeting-row" data-meeting-id="5">
+                    <td>5</td>
+                    <td>
+                      <div class="hs-align-items-center">
+                        <i class="fa fa-chevron-down hs-expand-icon hs-margin-right-10"></i>
+                        <div>
+                          <span class="hs-meeting-title">4月会议</span>
+                          <div class="hs-small hs-text-muted">会议记录表</div>
+                        </div>
+                      </div>
+                    </td>
+                    <td class="hs-meeting-date">2025-04-07</td>
+                    <td>测试</td>
+                    <td>
+                      <div class="hs-flex">
+                        <a href="single.php?meeting_id=5" class="hs-btn hs-btn-sm hs-btn-primary margin-right-5" title="编辑">
+                          <i class="fas fa-edit"></i>
+                        </a>
+                        <button class="hs-btn hs-btn-sm hs-btn-danger delete-meeting-btn" data-meeting-id="5" title="删除">
+                          <i class="fas fa-trash"></i>
+                        </button>
+                      </div>
+                    </td>
+                    <td>
+                      <span class="hs-label hs-label-primary">
+                        1项
+                      </span>
+                    </td>
+                  </tr>
+
+                  <!-- 会议明细展开区域 -->
+                  <tr class="hs-meeting-detail" id="details-5">
+                    <td colspan="6" class="hs-padding-0">
+                      <div class="hs-detail-container">
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
+                          <div>
+                            <h5 style="margin-top: 0; margin-bottom: 0;">会议明细</h5>
+                          </div>
+                          <div>
+                            <button class="hs-btn hs-btn-sm hs-btn-success add-detail-btn"
+                              data-meeting-id="5">
+                              <i class="fas fa-plus"></i> 添加明细
+                            </button>
+                          </div>
+                        </div>
+
+                        <!-- 会议摘要信息 -->
+                        <div class="hs-panel hs-panel-default hs-margin-bottom-15">
+                          <div class="hs-panel-heading">
+                            会议信息
+                          </div>
+                          <div class="hs-panel-body">
+                            <table style="width:100%">
+                              <tr>
+                                <td style="width:50%; vertical-align:top; padding-right:15px;">
+                                  <p><strong>记录人：</strong> 测试</p>
+                                  <p><strong>参会人员：</strong> adada</p>
+                                  <p><strong>缺席人员：</strong> 无</p>
+                                </td>
+                                <td style="width:50%; vertical-align:top;">
+                                  <p><strong>会议总结：</strong></p>
+                                  <div class="hs-well" style="max-height:150px; overflow-y:auto">
+                                    测试                                  </div>
+                                </td>
+                              </tr>
+                            </table>
+                          </div>
+                        </div>
+
+                        <!-- 明细列表 -->
+                                                  <div class="hs-table-responsive">
+                            <table class="hs-table">
+                              <thead>
+                                <tr>
+                                  <th>责任人</th>
+                                  <th>会议内容</th>
+                                  <th>解决方案</th>
+                                  <th class="hs-actions-column">操作</th>
+                                </tr>
+                              </thead>
+                              <tbody>
+                                                                  <tr class="hs-detail-item" data-detail-id="7">
+                                    <td>
+                                      <strong>ad</strong>
+                                                                              <div class="hs-small hs-text-muted">IT部</div>
+                                                                          </td>
+                                    <td>
+                                      <div style="white-space:pre-line">
+                                        adad                                      </div>
+                                    </td>
+                                    <td>
+                                      <div style="white-space:pre-line">
+                                        adad                                      </div>
+                                                                              <div class="hs-text-muted hs-small hs-margin-top-5">
+                                          <i class="fas fa-calendar"></i> 计划完成:
+                                          展会前                                        </div>
+                                                                          </td>
+                                    <td>
+                                      <div class="hs-flex">
+                                        <button class="hs-btn hs-btn-sm hs-btn-primary hs-margin-right-5 edit-detail-btn"
+                                          data-detail-id="7"
+                                          data-meeting-id="5">
+                                          <i class="fas fa-edit"></i>
+                                        </button>
+                                        <button class="hs-btn hs-btn-sm hs-btn-danger delete-detail-btn"
+                                          data-detail-id="7">
+                                          <i class="fas fa-trash"></i>
+                                        </button>
+                                      </div>
+                                    </td>
+                                  </tr>
+                                                              </tbody>
+                            </table>
+                          </div>
+                                              </div>
+                    </td>
+                  </tr>
+                                  <!-- 会议记录行 -->
+                  <tr class="hs-meeting-row" data-meeting-id="4">
+                    <td>4</td>
+                    <td>
+                      <div class="hs-align-items-center">
+                        <i class="fa fa-chevron-down hs-expand-icon hs-margin-right-10"></i>
+                        <div>
+                          <span class="hs-meeting-title">3月会议</span>
+                          <div class="hs-small hs-text-muted">会议记录表</div>
+                        </div>
+                      </div>
+                    </td>
+                    <td class="hs-meeting-date">2025-03-03</td>
+                    <td>叶子怡</td>
+                    <td>
+                      <div class="hs-flex">
+                        <a href="single.php?meeting_id=4" class="hs-btn hs-btn-sm hs-btn-primary margin-right-5" title="编辑">
+                          <i class="fas fa-edit"></i>
+                        </a>
+                        <button class="hs-btn hs-btn-sm hs-btn-danger delete-meeting-btn" data-meeting-id="4" title="删除">
+                          <i class="fas fa-trash"></i>
+                        </button>
+                      </div>
+                    </td>
+                    <td>
+                      <span class="hs-label hs-label-primary">
+                        0项
+                      </span>
+                    </td>
+                  </tr>
+
+                  <!-- 会议明细展开区域 -->
+                  <tr class="hs-meeting-detail" id="details-4">
+                    <td colspan="6" class="hs-padding-0">
+                      <div class="hs-detail-container">
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
+                          <div>
+                            <h5 style="margin-top: 0; margin-bottom: 0;">会议明细</h5>
+                          </div>
+                          <div>
+                            <button class="hs-btn hs-btn-sm hs-btn-success add-detail-btn"
+                              data-meeting-id="4">
+                              <i class="fas fa-plus"></i> 添加明细
+                            </button>
+                          </div>
+                        </div>
+
+                        <!-- 会议摘要信息 -->
+                        <div class="hs-panel hs-panel-default hs-margin-bottom-15">
+                          <div class="hs-panel-heading">
+                            会议信息
+                          </div>
+                          <div class="hs-panel-body">
+                            <table style="width:100%">
+                              <tr>
+                                <td style="width:50%; vertical-align:top; padding-right:15px;">
+                                  <p><strong>记录人：</strong> 叶子怡</p>
+                                  <p><strong>参会人员：</strong> 无记录</p>
+                                  <p><strong>缺席人员：</strong> 无</p>
+                                </td>
+                                <td style="width:50%; vertical-align:top;">
+                                  <p><strong>会议总结：</strong></p>
+                                  <div class="hs-well" style="max-height:150px; overflow-y:auto">
+                                    一、整体BN的询盘减少，原因可能是：1、无NEWS 2、中文BN的产品比较少；焊接产品有慢慢起来，后续周瑞关于BN的产品多翻译平衡好一组、二组的主项目；Emily找一些精准、质量高关于BN的news给子怡进行宣传。<br />
+二、2月Sales的询盘有增加共66个、电话8个，但与高峰期80+还有一定差距，有进步的空间，恢复80+询盘量<br />
+三、后续视频\192.168.2.28\g\07产品视频\【CERADIR先进陶瓷在线】里面的视频文案可以借鉴参考<br />
+四、关于news，（1）业务员提供了许多news，但内容浅显（仅大纲级）专业度不足，（2）周瑞提议新增一个产品模块，可直接跳转到不同的模块查看更加详细的资料；或增加视频图片，增加News的可读性                                  </div>
+                                </td>
+                              </tr>
+                            </table>
+                          </div>
+                        </div>
+
+                        <!-- 明细列表 -->
+                                                  <div class="hs-empty-details">
+                            <p><i class="fas fa-info-circle me-2"></i>暂无明细记录</p>
+                          </div>
+                                              </div>
+                    </td>
+                  </tr>
+                                  <!-- 会议记录行 -->
+                  <tr class="hs-meeting-row" data-meeting-id="3">
+                    <td>3</td>
+                    <td>
+                      <div class="hs-align-items-center">
+                        <i class="fa fa-chevron-down hs-expand-icon hs-margin-right-10"></i>
+                        <div>
+                          <span class="hs-meeting-title">3月会议</span>
+                          <div class="hs-small hs-text-muted">会议记录表</div>
+                        </div>
+                      </div>
+                    </td>
+                    <td class="hs-meeting-date">2025-03-03</td>
+                    <td>叶子怡</td>
+                    <td>
+                      <div class="hs-flex">
+                        <a href="single.php?meeting_id=3" class="hs-btn hs-btn-sm hs-btn-primary margin-right-5" title="编辑">
+                          <i class="fas fa-edit"></i>
+                        </a>
+                        <button class="hs-btn hs-btn-sm hs-btn-danger delete-meeting-btn" data-meeting-id="3" title="删除">
+                          <i class="fas fa-trash"></i>
+                        </button>
+                      </div>
+                    </td>
+                    <td>
+                      <span class="hs-label hs-label-primary">
+                        0项
+                      </span>
+                    </td>
+                  </tr>
+
+                  <!-- 会议明细展开区域 -->
+                  <tr class="hs-meeting-detail" id="details-3">
+                    <td colspan="6" class="hs-padding-0">
+                      <div class="hs-detail-container">
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
+                          <div>
+                            <h5 style="margin-top: 0; margin-bottom: 0;">会议明细</h5>
+                          </div>
+                          <div>
+                            <button class="hs-btn hs-btn-sm hs-btn-success add-detail-btn"
+                              data-meeting-id="3">
+                              <i class="fas fa-plus"></i> 添加明细
+                            </button>
+                          </div>
+                        </div>
+
+                        <!-- 会议摘要信息 -->
+                        <div class="hs-panel hs-panel-default hs-margin-bottom-15">
+                          <div class="hs-panel-heading">
+                            会议信息
+                          </div>
+                          <div class="hs-panel-body">
+                            <table style="width:100%">
+                              <tr>
+                                <td style="width:50%; vertical-align:top; padding-right:15px;">
+                                  <p><strong>记录人：</strong> 叶子怡</p>
+                                  <p><strong>参会人员：</strong> 无记录</p>
+                                  <p><strong>缺席人员：</strong> 无</p>
+                                </td>
+                                <td style="width:50%; vertical-align:top;">
+                                  <p><strong>会议总结：</strong></p>
+                                  <div class="hs-well" style="max-height:150px; overflow-y:auto">
+                                    一、整体BN的询盘减少，原因可能是：1、无NEWS 2、中文BN的产品比较少；焊接产品有慢慢起来，后续周瑞关于BN的产品多翻译平衡好一组、二组的主项目；Emily找一些精准、质量高关于BN的news给子怡进行宣传。<br />
+二、2月Sales的询盘有增加共66个、电话8个，但与高峰期80+还有一定差距，有进步的空间，恢复80+询盘量<br />
+三、后续视频\192.168.2.28\g\07产品视频\【CERADIR先进陶瓷在线】里面的视频文案可以借鉴参考<br />
+四、关于news，（1）业务员提供了许多news，但内容浅显（仅大纲级）专业度不足，（2）周瑞提议新增一个产品模块，可直接跳转到不同的模块查看更加详细的资料；或增加视频图片，增加News的可读性                                  </div>
+                                </td>
+                              </tr>
+                            </table>
+                          </div>
+                        </div>
+
+                        <!-- 明细列表 -->
+                                                  <div class="hs-empty-details">
+                            <p><i class="fas fa-info-circle me-2"></i>暂无明细记录</p>
+                          </div>
+                                              </div>
+                    </td>
+                  </tr>
+                                  <!-- 会议记录行 -->
+                  <tr class="hs-meeting-row" data-meeting-id="2">
+                    <td>2</td>
+                    <td>
+                      <div class="hs-align-items-center">
+                        <i class="fa fa-chevron-down hs-expand-icon hs-margin-right-10"></i>
+                        <div>
+                          <span class="hs-meeting-title">3月会议</span>
+                          <div class="hs-small hs-text-muted">会议记录表</div>
+                        </div>
+                      </div>
+                    </td>
+                    <td class="hs-meeting-date">2025-03-03</td>
+                    <td>叶子怡</td>
+                    <td>
+                      <div class="hs-flex">
+                        <a href="single.php?meeting_id=2" class="hs-btn hs-btn-sm hs-btn-primary margin-right-5" title="编辑">
+                          <i class="fas fa-edit"></i>
+                        </a>
+                        <button class="hs-btn hs-btn-sm hs-btn-danger delete-meeting-btn" data-meeting-id="2" title="删除">
+                          <i class="fas fa-trash"></i>
+                        </button>
+                      </div>
+                    </td>
+                    <td>
+                      <span class="hs-label hs-label-primary">
+                        4项
+                      </span>
+                    </td>
+                  </tr>
+
+                  <!-- 会议明细展开区域 -->
+                  <tr class="hs-meeting-detail" id="details-2">
+                    <td colspan="6" class="hs-padding-0">
+                      <div class="hs-detail-container">
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
+                          <div>
+                            <h5 style="margin-top: 0; margin-bottom: 0;">会议明细</h5>
+                          </div>
+                          <div>
+                            <button class="hs-btn hs-btn-sm hs-btn-success add-detail-btn"
+                              data-meeting-id="2">
+                              <i class="fas fa-plus"></i> 添加明细
+                            </button>
+                          </div>
+                        </div>
+
+                        <!-- 会议摘要信息 -->
+                        <div class="hs-panel hs-panel-default hs-margin-bottom-15">
+                          <div class="hs-panel-heading">
+                            会议信息
+                          </div>
+                          <div class="hs-panel-body">
+                            <table style="width:100%">
+                              <tr>
+                                <td style="width:50%; vertical-align:top; padding-right:15px;">
+                                  <p><strong>记录人：</strong> 叶子怡</p>
+                                  <p><strong>参会人员：</strong> 无记录</p>
+                                  <p><strong>缺席人员：</strong> 无</p>
+                                </td>
+                                <td style="width:50%; vertical-align:top;">
+                                  <p><strong>会议总结：</strong></p>
+                                  <div class="hs-well" style="max-height:150px; overflow-y:auto">
+                                    一、整体BN的询盘减少，原因可能是：1、无NEWS 2、中文BN的产品比较少；焊接产品有慢慢起来，后续周瑞关于BN的产品多翻译平衡好一组、二组的主项目；Emily找一些精准、质量高关于BN的news给子怡进行宣传。<br />
+二、2月Sales的询盘有增加共66个、电话8个，但与高峰期80+还有一定差距，有进步的空间，恢复80+询盘量<br />
+三、后续视频\192.168.2.28\g\07产品视频\【CERADIR先进陶瓷在线】里面的视频文案可以借鉴参考<br />
+四、关于news，（1）业务员提供了许多news，但内容浅显（仅大纲级）专业度不足，（2）周瑞提议新增一个产品模块，可直接跳转到不同的模块查看更加详细的资料；或增加视频图片，增加News的可读性                                  </div>
+                                </td>
+                              </tr>
+                            </table>
+                          </div>
+                        </div>
+
+                        <!-- 明细列表 -->
+                                                  <div class="hs-table-responsive">
+                            <table class="hs-table">
+                              <thead>
+                                <tr>
+                                  <th>责任人</th>
+                                  <th>会议内容</th>
+                                  <th>解决方案</th>
+                                  <th class="hs-actions-column">操作</th>
+                                </tr>
+                              </thead>
+                              <tbody>
+                                                                  <tr class="hs-detail-item" data-detail-id="12">
+                                    <td>
+                                      <strong>罗蔡丽</strong>
+                                                                          </td>
+                                    <td>
+                                      <div style="white-space:pre-line">
+                                        1、新瓷的账号已经转过来
+2、关于阿里巴巴定制品的价格区间
+3、格睿Heater产品拍摄需求（需子怡支持）aa                                      </div>
+                                    </td>
+                                    <td>
+                                      <div style="white-space:pre-line">
+                                        1.需要Emily帮忙沟通实现信息共享
+2.从高精密的产品先调整过来（优先整理晶圆/半导体/PBN类）                                      </div>
+                                                                              <div class="hs-text-muted hs-small hs-margin-top-5">
+                                          <i class="fas fa-calendar"></i> 计划完成:
+                                          持续性工作                                        </div>
+                                                                          </td>
+                                    <td>
+                                      <div class="hs-flex">
+                                        <button class="hs-btn hs-btn-sm hs-btn-primary hs-margin-right-5 edit-detail-btn"
+                                          data-detail-id="12"
+                                          data-meeting-id="2">
+                                          <i class="fas fa-edit"></i>
+                                        </button>
+                                        <button class="hs-btn hs-btn-sm hs-btn-danger delete-detail-btn"
+                                          data-detail-id="12">
+                                          <i class="fas fa-trash"></i>
+                                        </button>
+                                      </div>
+                                    </td>
+                                  </tr>
+                                                                  <tr class="hs-detail-item" data-detail-id="6">
+                                    <td>
+                                      <strong>洪高艺</strong>
+                                                                              <div class="hs-small hs-text-muted">IT部</div>
+                                                                          </td>
+                                    <td>
+                                      <div style="white-space:pre-line">
+                                        1、包装打样
+2、展会banner、海报等设计，资料等Emily提供
+3、日本陶瓷展与半导体展的官网宣传页制作
+4、展会邀请函的制作                                      </div>
+                                    </td>
+                                    <td>
+                                      <div style="white-space:pre-line">
+                                        1.会后安排时间完成
+2.展会邀请函的制作需要Emily确认展位号                                      </div>
+                                                                              <div class="hs-text-muted hs-small hs-margin-top-5">
+                                          <i class="fas fa-calendar"></i> 计划完成:
+                                          展会前                                        </div>
+                                                                          </td>
+                                    <td>
+                                      <div class="hs-flex">
+                                        <button class="hs-btn hs-btn-sm hs-btn-primary hs-margin-right-5 edit-detail-btn"
+                                          data-detail-id="6"
+                                          data-meeting-id="2">
+                                          <i class="fas fa-edit"></i>
+                                        </button>
+                                        <button class="hs-btn hs-btn-sm hs-btn-danger delete-detail-btn"
+                                          data-detail-id="6">
+                                          <i class="fas fa-trash"></i>
+                                        </button>
+                                      </div>
+                                    </td>
+                                  </tr>
+                                                                  <tr class="hs-detail-item" data-detail-id="5">
+                                    <td>
+                                      <strong>周瑞</strong>
+                                                                              <div class="hs-small hs-text-muted">IT部</div>
+                                                                          </td>
+                                    <td>
+                                      <div style="white-space:pre-line">
+                                        1.网站规划方案制定（待完成）
+2.中文新闻翻译（持续更新）
+3.提议新增News产品模块（跳转详情页）或嵌入视频/图片                                      </div>
+                                    </td>
+                                    <td>
+                                      <div style="white-space:pre-line">
+                                        1.制定好方案后开会讨论，可行性
+2.中文新闻翻译持续更新
+3.后续发布的news：晶圆TTV/BOW/WARP 整合配套视频/图片                                      </div>
+                                                                          </td>
+                                    <td>
+                                      <div class="hs-flex">
+                                        <button class="hs-btn hs-btn-sm hs-btn-primary hs-margin-right-5 edit-detail-btn"
+                                          data-detail-id="5"
+                                          data-meeting-id="2">
+                                          <i class="fas fa-edit"></i>
+                                        </button>
+                                        <button class="hs-btn hs-btn-sm hs-btn-danger delete-detail-btn"
+                                          data-detail-id="5">
+                                          <i class="fas fa-trash"></i>
+                                        </button>
+                                      </div>
+                                    </td>
+                                  </tr>
+                                                                  <tr class="hs-detail-item" data-detail-id="4">
+                                    <td>
+                                      <strong>叶子怡</strong>
+                                                                          </td>
+                                    <td>
+                                      <div style="white-space:pre-line">
+                                        1. Europage网站改版后需优化已上传产品
+2. 标准品爆款视频拍摄（待办）
+3. B2B/社媒链接同步至Chris                                      </div>
+                                    </td>
+                                    <td>
+                                      <div style="white-space:pre-line">
+                                        1. 补充视频、关键词优化产品页面
+2. 完成视频拍摄并发布
+3. 推动Chris实现一键发布功能                                      </div>
+                                                                              <div class="hs-text-muted hs-small hs-margin-top-5">
+                                          <i class="fas fa-calendar"></i> 计划完成:
+                                          展会前                                        </div>
+                                                                          </td>
+                                    <td>
+                                      <div class="hs-flex">
+                                        <button class="hs-btn hs-btn-sm hs-btn-primary hs-margin-right-5 edit-detail-btn"
+                                          data-detail-id="4"
+                                          data-meeting-id="2">
+                                          <i class="fas fa-edit"></i>
+                                        </button>
+                                        <button class="hs-btn hs-btn-sm hs-btn-danger delete-detail-btn"
+                                          data-detail-id="4">
+                                          <i class="fas fa-trash"></i>
+                                        </button>
+                                      </div>
+                                    </td>
+                                  </tr>
+                                                              </tbody>
+                            </table>
+                          </div>
+                                              </div>
+                    </td>
+                  </tr>
+                                          </tbody>
+          </table>
+        </div>
+        <!-- 替换现有的分页控件为表格布局 -->
+        <div class="hs-pagination-container" style="margin-top: 20px;">
+          <table style="width: 100%;" class="hs-pagination-table">
+            <tr>
+              <td style="width: 33%; text-align: left; vertical-align: middle;">
+                <div class="hs-page-info">
+                                      显示 1 - 8 条，共 8 条记录
+                                  </div>
+              </td>
+              
+              <td style="width: 34%; text-align: center; vertical-align: middle;">
+                <div class="hs-text-center">
+                  <ul class="hs-pagination">
+                    <!-- 上一页 -->
+                    <li class="disabled">
+                      <a href="javascript:void(0)">
+                        <span>&laquo;</span>
+                      </a>
+                    </li>
+                    
+                    <li class="active"><a href="?paged=1&per_page=10">1</a></li>                    
+                    <!-- 下一页 -->
+                    <li class="disabled">
+                      <a href="javascript:void(0)">
+                        <span>&raquo;</span>
+                      </a>
+                    </li>
+                  </ul>
+                </div>
+              </td>
+              
+              <td style="width: 33%; text-align: right; vertical-align: middle;">
+                <div style="display: inline-block;">
+                  <label class="hs-control-label hs-margin-right-5">每页显示:</label>
+                  <select class="hs-form-control hs-input-sm" id="perPageSelect" style="width: auto; display: inline-block;">
+                    <option value="5" >5条</option>
+                    <option value="10" selected>10条</option>
+                    <option value="20" >20条</option>
+                    <option value="50" >50条</option>
+                  </select>
+                </div>
+              </td>
+            </tr>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 明细编辑模态框 -->
+  <div class="hs-modal fade" id="detailModal" tabindex="-1" aria-labelledby="detailModalLabel" aria-hidden="true">
+    <div class="hs-modal-dialog hs-modal-lg">
+      <div class="hs-modal-content">
+        <div class="hs-modal-header">
+          <h4 class="hs-modal-title" id="detailModalLabel">会议明细</h4>
+          <button type="button" class="hs-close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        </div>
+        <div class="hs-modal-body">
+          <form id="detailForm" class="hs-form-horizontal">
+            <input type="hidden" id="detailId" name="id">
+            <input type="hidden" id="minutesId" name="minutes_id">
+            <input type="hidden" id="actionType" name="action" value="create">
+
+            <div class="hs-row">
+              <div class="hs-col-md-6">
+                <div class="hs-form-group">
+                  <label for="department" class="hs-col-sm-4 hs-control-label">责任部门</label>
+                  <div class="hs-col-sm-8">  <!-- 这里从col-sm-8修改为hs-col-sm-8 -->
+                    <input type="text" class="hs-form-control" id="department" name="department">
+                  </div>
+                </div>
+              </div>
+              <div class="hs-col-md-6">
+                <div class="hs-form-group">
+                  <label for="responsiblePerson" class="hs-col-sm-4 hs-control-label">责任人 <span class="hs-text-danger">*</span></label>
+                  <div class="hs-col-sm-8">
+                    <input type="text" class="hs-form-control" id="responsiblePerson" name="responsible_person" required>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="hs-form-group">
+              <label for="meetingContent" class="hs-col-sm-2 hs-control-label">会议内容 <span class="hs-text-danger">*</span></label>
+              <div class="hs-col-sm-10">  <!-- 这里修改 -->
+                <textarea class="hs-form-control" id="meetingContent" name="meeting_content" rows="4" required></textarea>
+              </div>
+            </div>
+
+            <div class="hs-form-group">
+              <label for="solution" class="hs-col-sm-2 hs-control-label">解决方案 <span class="hs-text-danger">*</span></label>
+              <div class="hs-col-sm-10">  <!-- 这里从col-sm-10修改为hs-col-sm-10 -->
+                <textarea class="hs-form-control" id="solution" name="solution" rows="4" required></textarea>
+              </div>
+            </div>
+
+            <div class="hs-row">
+              <div class="hs-col-md-6">
+                <div class="hs-form-group">
+                  <label for="plannedCompletionTime" class="hs-col-sm-4 hs-control-label">计划完成时间</label>
+                  <div class="hs-col-sm-8">
+                    <input type="text" class="hs-form-control" id="plannedCompletionTime" name="planned_completion_time">
+                  </div>
+                </div>
+              </div>
+              <div class="hs-col-md-6">
+                <div class="hs-form-group">
+                  <label for="cooperatingDepartment" class="hs-col-sm-4 hs-control-label">配合部门</label>
+                  <div class="hs-col-sm-8">
+                    <input type="text" class="hs-form-control" id="cooperatingDepartment" name="cooperating_department">
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="hs-form-group">
+              <label for="others" class="hs-col-sm-2 hs-control-label">其他</label>
+              <div class="hs-col-sm-10">
+                <textarea class="hs-form-control" id="others" name="others" rows="2"></textarea>
+              </div>
+            </div>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="hs-btn hs-btn-default" data-dismiss="modal">取消</button>
+          <button type="button" class="hs-btn hs-btn-primary" id="saveDetailBtn">保存</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 删除明细确认模态框 -->
+  <div class="hs-modal fade" id="deleteModal" tabindex="-1" role="dialog">
+    <div class="hs-modal-dialog">
+      <div class="hs-modal-content">
+        <div class="hs-modal-header">
+          <button type="button" class="hs-close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+          <h4 class="hs-modal-title">删除确认</h4>
+        </div>
+        <div class="hs-modal-body">
+          <p>确定要删除这条会议明细吗？此操作不可撤销。</p>
+        </div>
+        <div class="hs-modal-footer">
+          <button type="button" class="hs-btn hs-btn-default" data-dismiss="modal">取消</button>
+          <button type="button" class="hs-btn hs-btn-danger" id="confirmDeleteBtn">确认删除</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 删除会议确认模态框 -->
+  <div class="hs-modal fade" id="deleteMeetingModal" tabindex="-1" role="dialog">
+    <div class="hs-modal-dialog">
+      <div class="hs-modal-content">
+        <div class="hs-modal-header">
+          <button type="button" class="hs-close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+          <h4 class="hs-modal-title">删除会议确认</h4>
+        </div>
+        <div class="hs-modal-body">
+          <p class="hs-text-danger"><i class="fa fa-exclamation-triangle margin-right-5"></i>警告：删除会议记录将同时删除所有相关明细！</p>
+          <p>确定要删除这条会议记录吗？此操作不可撤销。</p>
+        </div>
+        <div class="hs-modal-footer">
+          <button type="button" class="hs-btn hs-btn-default" data-dismiss="modal">取消</button>
+          <button type="button" class="hs-btn hs-btn-danger" id="confirmDeleteMeetingBtn">确认删除</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Bootstrap & jQuery -->
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <!-- <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script> -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@3.4.1/dist/js/bootstrap.min.js"></script>
+  
+  <script src="https://hardsun.cn/assets/common/vendors/general/block-ui/jquery.blockUI.js" type="text/javascript"></script>
+
+  <script src="https://hardsun.cn/assets/common/vendors/general/toastr/build/toastr.min.js" type="text/javascript"></script>
+
+  <script src="https://hardsun.cn/assets/common/vendors/general/tinymce/tinymce.5.6.1.min.js" type="text/javascript"></script>
+
+
+  <script src="https://hardsun.cn/assets/common/vendors/general/jquery-validation/dist/jquery.validate.js" type="text/javascript"></script>
+  <script src="https://hardsun.cn/assets/common/vendors/general/jquery-validation/dist/additional-methods.js" type="text/javascript"></script>
+  <script src="https://hardsun.cn/assets/common/vendors/custom/js/vendors/jquery-validation.init.js" type="text/javascript"></script>
+
+
+  <script type='text/javascript' src='https://hardsun.cn/assets/common/js/common.min.js' defer onload=''></script>
+  <script>
+    $(document).ready(function() {
+      const detailApiUrl = 'http://innovaoaloc.cn/apps/meeting-minutes/test/example/detailapi.php';
+      const minuteApiUrl = 'http://innovaoaloc.cn/apps/meeting-minutes/test/example/minuteapi.php';
+      let currentDetailId = null;
+      let currentMeetingId = null;
+
+      
+      // // 初始化模态框
+      // const detailModal = new bootstrap.Modal(document.getElementById('detailModal'));
+      // const deleteModal = new bootstrap.Modal(document.getElementById('deleteModal'));
+      // const deleteMeetingModal = new bootstrap.Modal(document.getElementById('deleteMeetingModal'));
+      // const toast = new bootstrap.Toast(document.getElementById('toastNotification'));
+
+      // 每页显示数量变化时
+      $('#perPageSelect').on('change', function() {
+        const perPage = $(this).val();
+        window.location.href = `?paged=1&per_page=${perPage}`;
+      });
+
+      // 展开/收起会议明细 - 修复点击事件
+      $('.hs-meeting-row').on('click', function(e) {
+        // 只有在非按钮区域点击时展开
+        if ($(e.target).closest('.hs-btn, button, a, .delete-meeting-btn, .edit-detail-btn, .delete-detail-btn').length > 0) {
+          return;
+        }
+
+        const meetingId = $(this).data('meeting-id');
+        const detailRow = $(`#details-${meetingId}`);
+        const expandIcon = $(this).find('.hs-expand-icon');
+
+        // 切换展开状态
+        detailRow.toggle();
+        expandIcon.toggleClass('hs-rotate-icon');
+
+        // 关闭其他已展开的明细
+        if (detailRow.is(':visible')) {
+          $('.hs-meeting-detail').not(detailRow).hide();
+          $('.hs-meeting-row').not(this).find('.hs-expand-icon').removeClass('hs-rotate-icon');
+        }
+      });
+
+      // 删除会议按钮点击事件
+      $(document).on('click', '.delete-meeting-btn', function(e) {
+        e.stopPropagation(); // 阻止事件冒泡，避免展开明细
+        currentMeetingId = $(this).data('meeting-id');
+        $('#deleteMeetingModal').modal('show');
+      });
+
+      // 确认删除会议
+      $('#confirmDeleteMeetingBtn').on('click', function() {
+        if (!currentMeetingId) return;
+
+        $.ajax({
+          url: minuteApiUrl,
+          type: 'POST',
+          data: {
+            action: 'delete',
+            id: currentMeetingId
+          },
+          success: function(response) {
+            const result = typeof response === 'object' ? response : JSON.parse(response);
+
+            if (result.code === 0) {
+              // 删除成功
+              showNotification('会议记录删除成功', 'success');
+              // 刷新页面
+              setTimeout(() => location.reload(), 1000);
+            } else {
+              // 删除失败
+              showNotification('删除失败: ' + result.message, 'danger');
+            }
+
+            $('#deleteMeetingModal').modal('hide');
+          },
+          error: function(xhr, status, error) {
+            console.error("API错误:", status, error, xhr.responseText);
+            showNotification('网络错误，请稍后重试', 'danger');
+            $('#deleteMeetingModal').modal('hide');
+          }
+        });
+      });
+
+      // 编辑明细按钮点击事件
+      $(document).on('click', '.edit-detail-btn', function(e) {
+        e.stopPropagation(); // 阻止事件冒泡
+        const detailId = $(this).data('detail-id');
+        const meetingId = $(this).data('meeting-id');
+        currentDetailId = detailId;
+
+        // 查找明细数据 
+        const meetingsData = [{"id":"10","title":"da","theme":"4\u6708\u4f1a\u8bae","host":"\u6d4b\u8bd5","date":"2025-04-03","recorder":"\u6d4b\u8bd5","participants":"a","absentees":"a","absence_reason":"a","summary":"wu","created_date":"2025-04-08 15:09:13","modified_date":"2025-04-08 15:09:13","details":[{"id":"15","minutes_id":"10","department":"IT\u90e8","responsible_person":"cs","meeting_content":"s","solution":"s","planned_completion_time":"cs","cooperating_department":"css","others":"s","deleted":"1","deleted_date":null,"created_date":"2025-04-08 15:09:23.773","modified_date":"2025-04-08 15:09:23.773"}]},{"id":"8","title":"\u4f1a\u8bae\u8bb0\u5f55\u8868","theme":"4\u6708\u4f1a\u8bae","host":"\u6d4b\u8bd5","date":"2025-04-07","recorder":"\u6d4b\u8bd5","participants":"","absentees":"","absence_reason":"","summary":"\u65e0","created_date":"2025-04-07 09:17:45","modified_date":"2025-04-08 14:55:38","details":[{"id":"10","minutes_id":"8","department":"IT\u90e8","responsible_person":"\u6d2a\u9ad8\u827a","meeting_content":"ada","solution":"adadd","planned_completion_time":"\u5c55\u4f1a\u524d","cooperating_department":"\u9700Emily\u63d0\u4ea4\u8d44\u6599\u3001\u786e\u8ba4\u5c55\u4f1a\u4fe1\u606f\u7b49","others":"","deleted":"1","deleted_date":null,"created_date":"2025-04-07 10:31:39.387","modified_date":"2025-04-08 14:56:36.000"}]},{"id":"7","title":"\u4f1a\u8bae\u8bb0\u5f55\u8868","theme":"4\u6708\u4f1a\u8bae","host":"\u6d4b\u8bd5","date":"2025-04-07","recorder":"\u6d4b\u8bd5","participants":"","absentees":"","absence_reason":"","summary":"\u65e0","created_date":"2025-04-07 09:12:56","modified_date":"2025-04-07 09:12:56","details":[{"id":"11","minutes_id":"7","department":"IT\u90e8","responsible_person":"\u6d2a\u9ad8\u827a","meeting_content":"ad","solution":"dd","planned_completion_time":"\u5c55\u4f1a\u524d","cooperating_department":"\u9700Emily\u63d0\u4ea4\u8d44\u6599\u3001\u786e\u8ba4\u5c55\u4f1a\u4fe1\u606f\u7b49","others":"","deleted":"1","deleted_date":null,"created_date":"2025-04-07 10:31:59.397","modified_date":"2025-04-07 10:31:59.397"}]},{"id":"6","title":"\u4f1a\u8bae\u8bb0\u5f55\u8868","theme":"4\u6708\u4f1a\u8bae","host":"\u6d4b\u8bd5","date":"2025-04-07","recorder":"\u6d4b\u8bd5","participants":"","absentees":"","absence_reason":"","summary":"\u65e0","created_date":"2025-04-07 09:11:58","modified_date":"2025-04-07 09:11:58","details":[]},{"id":"5","title":"\u4f1a\u8bae\u8bb0\u5f55\u8868","theme":"4\u6708\u4f1a\u8bae","host":"\u6d4b\u8bd5","date":"2025-04-07","recorder":"\u6d4b\u8bd5","participants":"adada","absentees":"","absence_reason":"","summary":"\u6d4b\u8bd5","created_date":"2025-04-07 09:11:46","modified_date":"2025-04-07 09:34:45","details":[{"id":"7","minutes_id":"5","department":"IT\u90e8","responsible_person":"ad","meeting_content":"adad","solution":"adad","planned_completion_time":"\u5c55\u4f1a\u524d","cooperating_department":"","others":"","deleted":"1","deleted_date":null,"created_date":"2025-04-07 09:34:56.077","modified_date":"2025-04-07 09:34:56.077"}]},{"id":"4","title":"\u4f1a\u8bae\u8bb0\u5f55\u8868","theme":"3\u6708\u4f1a\u8bae","host":"\u53f6\u5b50\u6021","date":"2025-03-03","recorder":"\u53f6\u5b50\u6021","participants":"","absentees":"\u65e0","absence_reason":"","summary":"\u4e00\u3001\u6574\u4f53BN\u7684\u8be2\u76d8\u51cf\u5c11\uff0c\u539f\u56e0\u53ef\u80fd\u662f\uff1a1\u3001\u65e0NEWS 2\u3001\u4e2d\u6587BN\u7684\u4ea7\u54c1\u6bd4\u8f83\u5c11\uff1b\u710a\u63a5\u4ea7\u54c1\u6709\u6162\u6162\u8d77\u6765\uff0c\u540e\u7eed\u5468\u745e\u5173\u4e8eBN\u7684\u4ea7\u54c1\u591a\u7ffb\u8bd1\u5e73\u8861\u597d\u4e00\u7ec4\u3001\u4e8c\u7ec4\u7684\u4e3b\u9879\u76ee\uff1bEmily\u627e\u4e00\u4e9b\u7cbe\u51c6\u3001\u8d28\u91cf\u9ad8\u5173\u4e8eBN\u7684news\u7ed9\u5b50\u6021\u8fdb\u884c\u5ba3\u4f20\u3002\r\n\u4e8c\u30012\u6708Sales\u7684\u8be2\u76d8\u6709\u589e\u52a0\u517166\u4e2a\u3001\u7535\u8bdd8\u4e2a\uff0c\u4f46\u4e0e\u9ad8\u5cf0\u671f80+\u8fd8\u6709\u4e00\u5b9a\u5dee\u8ddd\uff0c\u6709\u8fdb\u6b65\u7684\u7a7a\u95f4\uff0c\u6062\u590d80+\u8be2\u76d8\u91cf\r\n\u4e09\u3001\u540e\u7eed\u89c6\u9891\\192.168.2.28\\g\\07\u4ea7\u54c1\u89c6\u9891\\\u3010CERADIR\u5148\u8fdb\u9676\u74f7\u5728\u7ebf\u3011\u91cc\u9762\u7684\u89c6\u9891\u6587\u6848\u53ef\u4ee5\u501f\u9274\u53c2\u8003\r\n\u56db\u3001\u5173\u4e8enews\uff0c\uff081\uff09\u4e1a\u52a1\u5458\u63d0\u4f9b\u4e86\u8bb8\u591anews\uff0c\u4f46\u5185\u5bb9\u6d45\u663e\uff08\u4ec5\u5927\u7eb2\u7ea7\uff09\u4e13\u4e1a\u5ea6\u4e0d\u8db3\uff0c\uff082\uff09\u5468\u745e\u63d0\u8bae\u65b0\u589e\u4e00\u4e2a\u4ea7\u54c1\u6a21\u5757\uff0c\u53ef\u76f4\u63a5\u8df3\u8f6c\u5230\u4e0d\u540c\u7684\u6a21\u5757\u67e5\u770b\u66f4\u52a0\u8be6\u7ec6\u7684\u8d44\u6599\uff1b\u6216\u589e\u52a0\u89c6\u9891\u56fe\u7247\uff0c\u589e\u52a0News\u7684\u53ef\u8bfb\u6027","created_date":"2025-04-03 15:17:58","modified_date":"2025-04-03 15:17:58","details":[]},{"id":"3","title":"\u4f1a\u8bae\u8bb0\u5f55\u8868","theme":"3\u6708\u4f1a\u8bae","host":"\u53f6\u5b50\u6021","date":"2025-03-03","recorder":"\u53f6\u5b50\u6021","participants":"","absentees":"\u65e0","absence_reason":"","summary":"\u4e00\u3001\u6574\u4f53BN\u7684\u8be2\u76d8\u51cf\u5c11\uff0c\u539f\u56e0\u53ef\u80fd\u662f\uff1a1\u3001\u65e0NEWS 2\u3001\u4e2d\u6587BN\u7684\u4ea7\u54c1\u6bd4\u8f83\u5c11\uff1b\u710a\u63a5\u4ea7\u54c1\u6709\u6162\u6162\u8d77\u6765\uff0c\u540e\u7eed\u5468\u745e\u5173\u4e8eBN\u7684\u4ea7\u54c1\u591a\u7ffb\u8bd1\u5e73\u8861\u597d\u4e00\u7ec4\u3001\u4e8c\u7ec4\u7684\u4e3b\u9879\u76ee\uff1bEmily\u627e\u4e00\u4e9b\u7cbe\u51c6\u3001\u8d28\u91cf\u9ad8\u5173\u4e8eBN\u7684news\u7ed9\u5b50\u6021\u8fdb\u884c\u5ba3\u4f20\u3002\r\n\u4e8c\u30012\u6708Sales\u7684\u8be2\u76d8\u6709\u589e\u52a0\u517166\u4e2a\u3001\u7535\u8bdd8\u4e2a\uff0c\u4f46\u4e0e\u9ad8\u5cf0\u671f80+\u8fd8\u6709\u4e00\u5b9a\u5dee\u8ddd\uff0c\u6709\u8fdb\u6b65\u7684\u7a7a\u95f4\uff0c\u6062\u590d80+\u8be2\u76d8\u91cf\r\n\u4e09\u3001\u540e\u7eed\u89c6\u9891\\192.168.2.28\\g\\07\u4ea7\u54c1\u89c6\u9891\\\u3010CERADIR\u5148\u8fdb\u9676\u74f7\u5728\u7ebf\u3011\u91cc\u9762\u7684\u89c6\u9891\u6587\u6848\u53ef\u4ee5\u501f\u9274\u53c2\u8003\r\n\u56db\u3001\u5173\u4e8enews\uff0c\uff081\uff09\u4e1a\u52a1\u5458\u63d0\u4f9b\u4e86\u8bb8\u591anews\uff0c\u4f46\u5185\u5bb9\u6d45\u663e\uff08\u4ec5\u5927\u7eb2\u7ea7\uff09\u4e13\u4e1a\u5ea6\u4e0d\u8db3\uff0c\uff082\uff09\u5468\u745e\u63d0\u8bae\u65b0\u589e\u4e00\u4e2a\u4ea7\u54c1\u6a21\u5757\uff0c\u53ef\u76f4\u63a5\u8df3\u8f6c\u5230\u4e0d\u540c\u7684\u6a21\u5757\u67e5\u770b\u66f4\u52a0\u8be6\u7ec6\u7684\u8d44\u6599\uff1b\u6216\u589e\u52a0\u89c6\u9891\u56fe\u7247\uff0c\u589e\u52a0News\u7684\u53ef\u8bfb\u6027","created_date":"2025-04-03 15:13:05","modified_date":"2025-04-03 15:13:05","details":[]},{"id":"2","title":"\u4f1a\u8bae\u8bb0\u5f55\u8868","theme":"3\u6708\u4f1a\u8bae","host":"\u53f6\u5b50\u6021","date":"2025-03-03","recorder":"\u53f6\u5b50\u6021","participants":"","absentees":"\u65e0","absence_reason":"","summary":"\u4e00\u3001\u6574\u4f53BN\u7684\u8be2\u76d8\u51cf\u5c11\uff0c\u539f\u56e0\u53ef\u80fd\u662f\uff1a1\u3001\u65e0NEWS 2\u3001\u4e2d\u6587BN\u7684\u4ea7\u54c1\u6bd4\u8f83\u5c11\uff1b\u710a\u63a5\u4ea7\u54c1\u6709\u6162\u6162\u8d77\u6765\uff0c\u540e\u7eed\u5468\u745e\u5173\u4e8eBN\u7684\u4ea7\u54c1\u591a\u7ffb\u8bd1\u5e73\u8861\u597d\u4e00\u7ec4\u3001\u4e8c\u7ec4\u7684\u4e3b\u9879\u76ee\uff1bEmily\u627e\u4e00\u4e9b\u7cbe\u51c6\u3001\u8d28\u91cf\u9ad8\u5173\u4e8eBN\u7684news\u7ed9\u5b50\u6021\u8fdb\u884c\u5ba3\u4f20\u3002\r\n\u4e8c\u30012\u6708Sales\u7684\u8be2\u76d8\u6709\u589e\u52a0\u517166\u4e2a\u3001\u7535\u8bdd8\u4e2a\uff0c\u4f46\u4e0e\u9ad8\u5cf0\u671f80+\u8fd8\u6709\u4e00\u5b9a\u5dee\u8ddd\uff0c\u6709\u8fdb\u6b65\u7684\u7a7a\u95f4\uff0c\u6062\u590d80+\u8be2\u76d8\u91cf\r\n\u4e09\u3001\u540e\u7eed\u89c6\u9891\\192.168.2.28\\g\\07\u4ea7\u54c1\u89c6\u9891\\\u3010CERADIR\u5148\u8fdb\u9676\u74f7\u5728\u7ebf\u3011\u91cc\u9762\u7684\u89c6\u9891\u6587\u6848\u53ef\u4ee5\u501f\u9274\u53c2\u8003\r\n\u56db\u3001\u5173\u4e8enews\uff0c\uff081\uff09\u4e1a\u52a1\u5458\u63d0\u4f9b\u4e86\u8bb8\u591anews\uff0c\u4f46\u5185\u5bb9\u6d45\u663e\uff08\u4ec5\u5927\u7eb2\u7ea7\uff09\u4e13\u4e1a\u5ea6\u4e0d\u8db3\uff0c\uff082\uff09\u5468\u745e\u63d0\u8bae\u65b0\u589e\u4e00\u4e2a\u4ea7\u54c1\u6a21\u5757\uff0c\u53ef\u76f4\u63a5\u8df3\u8f6c\u5230\u4e0d\u540c\u7684\u6a21\u5757\u67e5\u770b\u66f4\u52a0\u8be6\u7ec6\u7684\u8d44\u6599\uff1b\u6216\u589e\u52a0\u89c6\u9891\u56fe\u7247\uff0c\u589e\u52a0News\u7684\u53ef\u8bfb\u6027","created_date":"2025-04-03 14:58:26","modified_date":"2025-04-03 14:58:26","details":[{"id":"12","minutes_id":"2","department":"","responsible_person":"\u7f57\u8521\u4e3d","meeting_content":"1\u3001\u65b0\u74f7\u7684\u8d26\u53f7\u5df2\u7ecf\u8f6c\u8fc7\u6765\r\n2\u3001\u5173\u4e8e\u963f\u91cc\u5df4\u5df4\u5b9a\u5236\u54c1\u7684\u4ef7\u683c\u533a\u95f4\r\n3\u3001\u683c\u777fHeater\u4ea7\u54c1\u62cd\u6444\u9700\u6c42\uff08\u9700\u5b50\u6021\u652f\u6301\uff09aa","solution":"1.\u9700\u8981Emily\u5e2e\u5fd9\u6c9f\u901a\u5b9e\u73b0\u4fe1\u606f\u5171\u4eab\r\n2.\u4ece\u9ad8\u7cbe\u5bc6\u7684\u4ea7\u54c1\u5148\u8c03\u6574\u8fc7\u6765\uff08\u4f18\u5148\u6574\u7406\u6676\u5706\/\u534a\u5bfc\u4f53\/PBN\u7c7b\uff09","planned_completion_time":"\u6301\u7eed\u6027\u5de5\u4f5c","cooperating_department":"\u9700Emily\u5e2e\u52a9\u6c9f\u901a\u3001\u5b50\u6021\u5e2e\u5fd9\u62cd\u6444heater","others":"","deleted":"1","deleted_date":null,"created_date":"2025-04-07 16:46:21.260","modified_date":"2025-04-08 15:10:49.000"},{"id":"6","minutes_id":"2","department":"IT\u90e8","responsible_person":"\u6d2a\u9ad8\u827a","meeting_content":"1\u3001\u5305\u88c5\u6253\u6837\r\n2\u3001\u5c55\u4f1abanner\u3001\u6d77\u62a5\u7b49\u8bbe\u8ba1\uff0c\u8d44\u6599\u7b49Emily\u63d0\u4f9b\r\n3\u3001\u65e5\u672c\u9676\u74f7\u5c55\u4e0e\u534a\u5bfc\u4f53\u5c55\u7684\u5b98\u7f51\u5ba3\u4f20\u9875\u5236\u4f5c\r\n4\u3001\u5c55\u4f1a\u9080\u8bf7\u51fd\u7684\u5236\u4f5c","solution":"1.\u4f1a\u540e\u5b89\u6392\u65f6\u95f4\u5b8c\u6210\r\n2.\u5c55\u4f1a\u9080\u8bf7\u51fd\u7684\u5236\u4f5c\u9700\u8981Emily\u786e\u8ba4\u5c55\u4f4d\u53f7","planned_completion_time":"\u5c55\u4f1a\u524d","cooperating_department":"\u9700Emily\u63d0\u4ea4\u8d44\u6599\u3001\u786e\u8ba4\u5c55\u4f1a\u4fe1\u606f\u7b49","others":"\u6d4b\u8bd5","deleted":"1","deleted_date":null,"created_date":"2025-04-03 18:16:30.017","modified_date":"2025-04-07 08:36:17.000"},{"id":"5","minutes_id":"2","department":"IT\u90e8","responsible_person":"\u5468\u745e","meeting_content":"1.\u7f51\u7ad9\u89c4\u5212\u65b9\u6848\u5236\u5b9a\uff08\u5f85\u5b8c\u6210\uff09\r\n2.\u4e2d\u6587\u65b0\u95fb\u7ffb\u8bd1\uff08\u6301\u7eed\u66f4\u65b0\uff09\r\n3.\u63d0\u8bae\u65b0\u589eNews\u4ea7\u54c1\u6a21\u5757\uff08\u8df3\u8f6c\u8be6\u60c5\u9875\uff09\u6216\u5d4c\u5165\u89c6\u9891\/\u56fe\u7247","solution":"1.\u5236\u5b9a\u597d\u65b9\u6848\u540e\u5f00\u4f1a\u8ba8\u8bba\uff0c\u53ef\u884c\u6027\r\n2.\u4e2d\u6587\u65b0\u95fb\u7ffb\u8bd1\u6301\u7eed\u66f4\u65b0\r\n3.\u540e\u7eed\u53d1\u5e03\u7684news\uff1a\u6676\u5706TTV\/BOW\/WARP \u6574\u5408\u914d\u5957\u89c6\u9891\/\u56fe\u7247","planned_completion_time":"","cooperating_department":"","others":"","deleted":"1","deleted_date":null,"created_date":"2025-04-03 18:00:39.080","modified_date":"2025-04-07 08:36:34.000"},{"id":"4","minutes_id":"2","department":"","responsible_person":"\u53f6\u5b50\u6021","meeting_content":"1. Europage\u7f51\u7ad9\u6539\u7248\u540e\u9700\u4f18\u5316\u5df2\u4e0a\u4f20\u4ea7\u54c1\r\n2. \u6807\u51c6\u54c1\u7206\u6b3e\u89c6\u9891\u62cd\u6444\uff08\u5f85\u529e\uff09\r\n3. B2B\/\u793e\u5a92\u94fe\u63a5\u540c\u6b65\u81f3Chris","solution":"1. \u8865\u5145\u89c6\u9891\u3001\u5173\u952e\u8bcd\u4f18\u5316\u4ea7\u54c1\u9875\u9762\r\n2. \u5b8c\u6210\u89c6\u9891\u62cd\u6444\u5e76\u53d1\u5e03\r\n3. \u63a8\u52a8Chris\u5b9e\u73b0\u4e00\u952e\u53d1\u5e03\u529f\u80fd","planned_completion_time":"\u5c55\u4f1a\u524d","cooperating_department":"","others":"","deleted":"1","deleted_date":null,"created_date":"2025-04-03 17:58:15.177","modified_date":"2025-04-07 17:04:52.000"}]}];
+        let detailData = null;
+
+        // 遍历会议数据找到对应的明细
+        for (const meeting of meetingsData) {
+          if (meeting.id == meetingId && meeting.details) {
+            for (const detail of meeting.details) {
+              if (detail.id == detailId) {
+                detailData = detail;
+                break;
+              }
+            }
+          }
+          if (detailData) break;
+        }
+
+        if (detailData) {
+          // 填充表单
+          $('#detailId').val(detailData.id);
+          $('#minutesId').val(meetingId);
+          $('#department').val(detailData.department);
+          $('#responsiblePerson').val(detailData.responsible_person);
+          $('#meetingContent').val(detailData.meeting_content);
+          $('#solution').val(detailData.solution);
+          $('#plannedCompletionTime').val(detailData.planned_completion_time);
+          $('#cooperatingDepartment').val(detailData.cooperating_department);
+          $('#others').val(detailData.others);
+          $('#actionType').val('update');
+          $('#detailModalLabel').text('编辑会议明细');
+
+          $('#detailModal').modal('show');
+        } else {
+          showNotification('未找到明细数据', 'danger');
+          console.error('未找到明细数据:', detailId, meetingId);
+        }
+      });
+
+      // 删除明细按钮点击事件
+      $(document).on('click', '.delete-detail-btn', function(e) {
+        e.stopPropagation(); // 阻止事件冒泡
+        currentDetailId = $(this).data('detail-id');
+        $('#deleteModal').modal('show');
+      });
+
+      // 确认删除明细
+      $('#confirmDeleteBtn').on('click', function() {
+        if (!currentDetailId) return;
+
+        $.ajax({
+          url: detailApiUrl,
+          type: 'POST',
+          data: {
+            action: 'delete',
+            id: currentDetailId
+          },
+          success: function(response) {
+            const result = typeof response === 'object' ? response : JSON.parse(response);
+
+            if (result.code === 0) {
+              // 删除成功
+              showNotification('明细删除成功', 'success');
+              // 刷新页面
+              setTimeout(() => location.reload(), 1000);
+            } else {
+              // 删除失败
+              showNotification('删除失败: ' + result.message, 'danger');
+            }
+
+            $('#deleteModal').modal('hide');
+          },
+          error: function(xhr, status, error) {
+            console.error("API错误:", status, error, xhr.responseText);
+            showNotification('网络错误，请稍后重试', 'danger');
+            $('#deleteModal').modal('hide');
+          }
+        });
+      });
+
+      // 保存明细
+      $('#saveDetailBtn').on('click', function() {
+        const form = document.getElementById('detailForm');
+
+        if (!form.checkValidity()) {
+          form.classList.add('was-validated');
+          // 高亮所有必填项
+          $('input[required], textarea[required]').each(function() {
+            if (!$(this).val()) {
+              $(this).parent().addClass('has-error');
+            } else {
+              $(this).parent().removeClass('has-error');
+            }
+          });
+          return;
+        }
+
+        // 收集表单数据
+        const formData = {};
+        $('#detailForm').serializeArray().forEach(item => {
+          formData[item.name] = item.value;
+        });
+
+        $.ajax({
+          url: detailApiUrl,
+          type: 'POST',
+          data: formData,
+          success: function(response) {
+            const result = typeof response === 'object' ? response : JSON.parse(response);
+
+            if (result.code === 0) {
+              // 操作成功
+              const actionType = $('#actionType').val();
+              showNotification(actionType === 'create' ? '明细添加成功' : '明细更新成功', 'success');
+
+              // 关闭模态框并刷新页面
+              $('#detailModal').modal('hide');
+              setTimeout(() => location.reload(), 1000);
+            } else {
+              // 操作失败
+              showNotification('操作失败: ' + result.message, 'danger');
+            }
+          },
+          error: function(xhr, status, error) {
+            console.error("API错误:", status, error, xhr.responseText);
+            showNotification('网络错误，请稍后重试', 'danger');
+          }
+        });
+      });
+
+      // 添加明细按钮点击事件
+      $('.add-detail-btn').on('click', function(e) {
+        e.stopPropagation();
+        const meetingId = $(this).data('meeting-id');
+
+        // 重置表单
+        $('#detailForm')[0].reset();
+        $('#detailId').val('');
+        $('#minutesId').val(meetingId);
+        $('#actionType').val('create');
+        $('#detailModalLabel').text('添加会议明细');
+
+        $('#detailModal').modal('show');
+      });
+
+      // 显示通知提示 - 使用toastr
+      function showNotification(message, type) {
+        toastr.options = {
+          closeButton: true,
+          progressBar: true,
+          positionClass: "toast-bottom-right",
+          timeOut: 5000
+        };
+
+        switch (type) {
+          case 'success':
+            toastr.success(message);
+            break;
+          case 'error':
+            toastr.error(message);
+            break;
+          case 'warning':
+            toastr.warning(message);
+            break;
+          default:
+            toastr.info(message);
+        }
+      }
+    });
+  </script>
+</body>
+
+</html>
