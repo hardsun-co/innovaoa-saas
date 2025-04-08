@@ -56,7 +56,7 @@ $minuteApi = 'http://innovaoaloc.cn/apps/meeting-minutes/test/example/minuteapi.
 
 
   <!-- Bootstrap CSS -->
-  <!-- <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet"> -->
+  <!-- <link href="https://cdn.jsdelivr.net/npm/bootstrap@3.4.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet"> -->
   <!-- Font Awesome 图标库 -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
   <style>
@@ -322,7 +322,7 @@ $minuteApi = 'http://innovaoaloc.cn/apps/meeting-minutes/test/example/minuteapi.
       min-height: 16.42px;  /* 确保有足够高度容纳关闭按钮 */
     }
 
-    .hs-modal-header .close {
+    .hs-modal-header .hs-close {
       position: absolute;
       right: 15px;
       top: 15px;
@@ -356,7 +356,7 @@ $minuteApi = 'http://innovaoaloc.cn/apps/meeting-minutes/test/example/minuteapi.
       align-items: center;
     }
 
-    .hs-close {
+    /* .hs-close {
       float: right;
       font-size: 21px;
       font-weight: bold;
@@ -372,7 +372,7 @@ $minuteApi = 'http://innovaoaloc.cn/apps/meeting-minutes/test/example/minuteapi.
 
     .hs-close:hover {
       opacity: .5;
-    }
+    } */
 
     .hs-margin-right-10 {
       margin-right: 10px; /* 增加边距 */
@@ -662,8 +662,8 @@ $minuteApi = 'http://innovaoaloc.cn/apps/meeting-minutes/test/example/minuteapi.
     <div class="hs-modal-dialog hs-modal-lg">
       <div class="hs-modal-content">
         <div class="hs-modal-header">
-          <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
           <h4 class="hs-modal-title" id="detailModalLabel">会议明细</h4>
+          <button type="button" class="hs-close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
         </div>
         <div class="hs-modal-body">
           <form id="detailForm" class="hs-form-horizontal">
@@ -744,7 +744,7 @@ $minuteApi = 'http://innovaoaloc.cn/apps/meeting-minutes/test/example/minuteapi.
     <div class="hs-modal-dialog">
       <div class="hs-modal-content">
         <div class="hs-modal-header">
-          <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+          <button type="button" class="hs-close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
           <h4 class="hs-modal-title">删除确认</h4>
         </div>
         <div class="hs-modal-body">
@@ -763,7 +763,7 @@ $minuteApi = 'http://innovaoaloc.cn/apps/meeting-minutes/test/example/minuteapi.
     <div class="hs-modal-dialog">
       <div class="hs-modal-content">
         <div class="hs-modal-header">
-          <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+          <button type="button" class="hs-close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
           <h4 class="hs-modal-title">删除会议确认</h4>
         </div>
         <div class="hs-modal-body">
@@ -781,7 +781,7 @@ $minuteApi = 'http://innovaoaloc.cn/apps/meeting-minutes/test/example/minuteapi.
   <!-- Bootstrap & jQuery -->
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
   <!-- <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script> -->
-  <script src="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@3.4.1/dist/js/bootstrap.min.js"></script>
   
   <script src="https://hardsun.cn/assets/common/vendors/general/block-ui/jquery.blockUI.js" type="text/javascript"></script>
 
