@@ -1,15 +1,17 @@
 <?php
 /*
- * @Description: 
+ * @Description:
  * @Author: pjw@hardsun
  * @Date: 2025-04-03 10:09:08
- * @LastEditTime: 2025-04-07 09:01:15
- * @LastEditors: pjw@hardsun
+ * @LastEditTime: 2025-04-08 16:23:17
+ * @LastEditors: chris@hardsun.cn
  * @FilePath: \Innovaoa\apps\Meeting-minutes\test\example\detailapi.php
  * @Copyright: Copyright©2019-2025 HARDSUN TECH Ltd
  */
 
-require_once '../../../../common/common.php';
+// 获取根目录的路径下的 common/common.php
+require_once dirname(__DIR__,5) . '/common/common.php';
+
 use Hs\Fmproject\Minutes;
 $minuteIndex = Minutes\Index::getInstance();
 $action = isset($_POST['action'])?$_POST['action']:'';

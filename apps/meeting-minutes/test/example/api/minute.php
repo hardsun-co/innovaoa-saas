@@ -3,13 +3,15 @@
  * @Description: 会议记录API处理
  * @Author: pjw@hardsun
  * @Date: 2025-04-03 10:09:08
- * @LastEditTime: 2025-04-07 09:29:33
- * @LastEditors: pjw@hardsun
+ * @LastEditTime: 2025-04-08 16:23:24
+ * @LastEditors: chris@hardsun.cn
  * @FilePath: \Innovaoa\apps\Meeting-minutes\test\example\minuteapi.php
  * @Copyright: Copyright©2019-2025 HARDSUN TECH Ltd
  */
 
-require_once '../../../../common/common.php';
+// 获取根目录的路径下的 common/common.php
+require_once dirname(__DIR__,5) . '/common/common.php';
+
 use Hs\Fmproject\Minutes;
 $minuteIndex = Minutes\Index::getInstance();
 $action = isset($_POST['action']) ? $_POST['action'] : '';
@@ -22,7 +24,7 @@ switch ($action) {
       $result['data'] = $minuteIndex->getItem($_POST['id']);
     }
     break;
-    
+
   case 'update':
     // 更新现有会议记录
     $result = $minuteIndex->update($_POST);
@@ -31,7 +33,7 @@ switch ($action) {
       $result['data'] = $minuteIndex->getItem($_POST['id']);
     }
     break;
-    
+
   case 'delete':
     // 删除会议记录
     if (!empty($_POST['id'])) {
@@ -40,7 +42,7 @@ switch ($action) {
       $result = ['code' => 1, 'message' => 'ID不能为空'];
     }
     break;
-    
+
   case 'get':
     // 获取单个会议记录
     if (!empty($_GET['id'])) {
@@ -54,7 +56,7 @@ switch ($action) {
       $result = ['code' => 1, 'message' => 'ID不能为空'];
     }
     break;
-    
+
   default:
     // 未指定操作或其他操作
     $result = ['code' => 1, 'message' => '未知操作'];

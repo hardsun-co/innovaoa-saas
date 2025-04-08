@@ -29,8 +29,8 @@ $minutes = $minuteIndex->getItems($params);
 $total = isset($minutes['total']) ? intval($minutes['total']) : (isset($minutes['items']) ? count($minutes['items']) : 0);
 $total_pages = $minutes['max_pages'];
 
-$detailApi = 'http://innovaoaloc.cn/apps/meeting-minutes/test/example/detailapi.php';
-$minuteApi = 'http://innovaoaloc.cn/apps/meeting-minutes/test/example/minuteapi.php';
+$detailApi = '/innonew/hsapp/apps/meeting-minutes/test/example/api/detail.php';
+$minuteApi = '/innonew/hsapp/apps/meeting-minutes/test/example/api/minute.php';
 ?>
 
 <!DOCTYPE html>
@@ -47,11 +47,11 @@ $minuteApi = 'http://innovaoaloc.cn/apps/meeting-minutes/test/example/minuteapi.
   <!--end:: COMMON STYLES -->
 
 
-  <link href="https://hardsun.cn/assets/common/css/main.min.css" rel="stylesheet" type="text/css">
+  <!-- <link href="https://hardsun.cn/assets/common/css/main.min.css" rel="stylesheet" type="text/css"> -->
 
 
   <!-- oa feedback form css -->
-  <link href="https://2innova.hardsun.cn/tools/oa-feedback/static/css/main.min.css" rel="stylesheet" type="text/css" />
+  <!-- <link href="https://2innova.hardsun.cn/tools/oa-feedback/static/css/main.min.css" rel="stylesheet" type="text/css" /> -->
 
 
 
@@ -302,7 +302,8 @@ $minuteApi = 'http://innovaoaloc.cn/apps/meeting-minutes/test/example/minuteapi.
 
     .hs-modal-dialog {
       width: 90%;
-      max-width: 900px; /* 根据需要调整 */
+      max-width: 900px;
+      /* 根据需要调整 */
       margin: 30px auto;
     }
 
@@ -319,7 +320,8 @@ $minuteApi = 'http://innovaoaloc.cn/apps/meeting-minutes/test/example/minuteapi.
       padding: 15px;
       border-bottom: 1px solid #e5e5e5;
       position: relative;
-      min-height: 16.42px;  /* 确保有足够高度容纳关闭按钮 */
+      min-height: 16.42px;
+      /* 确保有足够高度容纳关闭按钮 */
     }
 
     .hs-modal-header .hs-close {
@@ -346,6 +348,7 @@ $minuteApi = 'http://innovaoaloc.cn/apps/meeting-minutes/test/example/minuteapi.
       text-align: right;
       border-top: 1px solid #e5e5e5;
     }
+
     /* 在CSS中添加或修改以下样式 */
     .hs-modal-header {
       padding: 15px;
@@ -375,21 +378,27 @@ $minuteApi = 'http://innovaoaloc.cn/apps/meeting-minutes/test/example/minuteapi.
     } */
 
     .hs-margin-right-10 {
-      margin-right: 10px; /* 增加边距 */
+      margin-right: 10px;
+      /* 增加边距 */
     }
 
     /* 优化箭头图标显示 */
     .hs-expand-icon {
-      font-size: 14px;    /* 适当调整图标大小 */
-      width: 16px;        /* 固定宽度 */
-      text-align: center; /* 居中对齐 */
-      color: #337ab7;     /* 使用主色调 */
+      font-size: 14px;
+      /* 适当调整图标大小 */
+      width: 16px;
+      /* 固定宽度 */
+      text-align: center;
+      /* 居中对齐 */
+      color: #337ab7;
+      /* 使用主色调 */
     }
 
     /* 改进会议记录主题和标题样式 */
     .hs-meeting-title {
       font-weight: 500;
-      margin-left: 2px;   /* 微调左边距 */
+      margin-left: 2px;
+      /* 微调左边距 */
     }
   </style>
 </head>
@@ -402,7 +411,7 @@ $minuteApi = 'http://innovaoaloc.cn/apps/meeting-minutes/test/example/minuteapi.
       </div>
       <div class="hs-header-actions">
         <a href="single.php" class="hs-btn hs-btn-primary">
-          <i class="fa fa-plus margin-right-5"></i> 新建会议
+          <i class="fa fa-plus hs-margin-right-5"></i> 新建会议
         </a>
       </div>
     </div>
@@ -426,7 +435,7 @@ $minuteApi = 'http://innovaoaloc.cn/apps/meeting-minutes/test/example/minuteapi.
                 <?php foreach ($minutes['items'] as $index => $meeting): ?>
                   <!-- 会议记录行 -->
                   <tr class="hs-meeting-row" data-meeting-id="<?php echo $meeting['id']; ?>">
-                    <td><?php echo $index+1; ?></td>
+                    <td><?php echo $index + 1; ?></td>
                     <td>
                       <div class="hs-align-items-center">
                         <i class="fa fa-chevron-down hs-expand-icon hs-margin-right-10"></i>
@@ -440,7 +449,7 @@ $minuteApi = 'http://innovaoaloc.cn/apps/meeting-minutes/test/example/minuteapi.
                     <td><?php echo htmlspecialchars($meeting['host']); ?></td>
                     <td>
                       <div class="hs-flex">
-                        <a href="single.php?meeting_id=<?php echo $meeting['id']; ?>" class="hs-btn hs-btn-sm hs-btn-primary margin-right-5" title="编辑">
+                        <a href="single.php?meeting_id=<?php echo $meeting['id']; ?>" class="hs-btn hs-btn-sm hs-btn-primary hs-margin-right-5" title="编辑">
                           <i class="fas fa-edit"></i>
                         </a>
                         <button class="hs-btn hs-btn-sm hs-btn-danger delete-meeting-btn" data-meeting-id="<?php echo $meeting['id']; ?>" title="删除">
@@ -580,17 +589,17 @@ $minuteApi = 'http://innovaoaloc.cn/apps/meeting-minutes/test/example/minuteapi.
                   <?php endif; ?>
                 </div>
               </td>
-              
+
               <td style="width: 34%; text-align: center; vertical-align: middle;">
                 <div class="hs-text-center">
                   <ul class="hs-pagination">
                     <!-- 上一页 -->
                     <li class="<?php echo $paged <= 1 ? 'disabled' : ''; ?>">
-                      <a href="<?php echo $paged <= 1 ? 'javascript:void(0)' : '?paged='.($paged - 1).'&per_page='.$per_page; ?>">
+                      <a href="<?php echo $paged <= 1 ? 'javascript:void(0)' : '?paged=' . ($paged - 1) . '&per_page=' . $per_page; ?>">
                         <span>&laquo;</span>
                       </a>
                     </li>
-                    
+
                     <?php
                     // 计算显示的页码范围
                     $start_page = max(1, $paged - 2);
@@ -628,17 +637,17 @@ $minuteApi = 'http://innovaoaloc.cn/apps/meeting-minutes/test/example/minuteapi.
                       echo '<li><a href="?paged=' . $total_pages . '&per_page=' . $per_page . '">' . $total_pages . '</a></li>';
                     }
                     ?>
-                    
+
                     <!-- 下一页 -->
                     <li class="<?php echo $paged >= $total_pages ? 'disabled' : ''; ?>">
-                      <a href="<?php echo $paged >= $total_pages ? 'javascript:void(0)' : '?paged='.($paged + 1).'&per_page='.$per_page; ?>">
+                      <a href="<?php echo $paged >= $total_pages ? 'javascript:void(0)' : '?paged=' . ($paged + 1) . '&per_page=' . $per_page; ?>">
                         <span>&raquo;</span>
                       </a>
                     </li>
                   </ul>
                 </div>
               </td>
-              
+
               <td style="width: 33%; text-align: right; vertical-align: middle;">
                 <div style="display: inline-block;">
                   <label class="hs-control-label hs-margin-right-5">每页显示:</label>
@@ -675,7 +684,7 @@ $minuteApi = 'http://innovaoaloc.cn/apps/meeting-minutes/test/example/minuteapi.
               <div class="hs-col-md-6">
                 <div class="hs-form-group">
                   <label for="department" class="hs-col-sm-4 hs-control-label">责任部门</label>
-                  <div class="hs-col-sm-8">  <!-- 这里从col-sm-8修改为hs-col-sm-8 -->
+                  <div class="hs-col-sm-8"> <!-- 这里从col-sm-8修改为hs-col-sm-8 -->
                     <input type="text" class="hs-form-control" id="department" name="department">
                   </div>
                 </div>
@@ -692,14 +701,14 @@ $minuteApi = 'http://innovaoaloc.cn/apps/meeting-minutes/test/example/minuteapi.
 
             <div class="hs-form-group">
               <label for="meetingContent" class="hs-col-sm-2 hs-control-label">会议内容 <span class="hs-text-danger">*</span></label>
-              <div class="hs-col-sm-10">  <!-- 这里修改 -->
+              <div class="hs-col-sm-10"> <!-- 这里修改 -->
                 <textarea class="hs-form-control" id="meetingContent" name="meeting_content" rows="4" required></textarea>
               </div>
             </div>
 
             <div class="hs-form-group">
               <label for="solution" class="hs-col-sm-2 hs-control-label">解决方案 <span class="hs-text-danger">*</span></label>
-              <div class="hs-col-sm-10">  <!-- 这里从col-sm-10修改为hs-col-sm-10 -->
+              <div class="hs-col-sm-10"> <!-- 这里从col-sm-10修改为hs-col-sm-10 -->
                 <textarea class="hs-form-control" id="solution" name="solution" rows="4" required></textarea>
               </div>
             </div>
@@ -782,7 +791,7 @@ $minuteApi = 'http://innovaoaloc.cn/apps/meeting-minutes/test/example/minuteapi.
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
   <!-- <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script> -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@3.4.1/dist/js/bootstrap.min.js"></script>
-  
+
   <script src="https://hardsun.cn/assets/common/vendors/general/block-ui/jquery.blockUI.js" type="text/javascript"></script>
 
   <script src="https://hardsun.cn/assets/common/vendors/general/toastr/build/toastr.min.js" type="text/javascript"></script>
@@ -803,7 +812,7 @@ $minuteApi = 'http://innovaoaloc.cn/apps/meeting-minutes/test/example/minuteapi.
       let currentDetailId = null;
       let currentMeetingId = null;
 
-      
+
       // // 初始化模态框
       // const detailModal = new bootstrap.Modal(document.getElementById('detailModal'));
       // const deleteModal = new bootstrap.Modal(document.getElementById('deleteModal'));
@@ -886,7 +895,7 @@ $minuteApi = 'http://innovaoaloc.cn/apps/meeting-minutes/test/example/minuteapi.
         const meetingId = $(this).data('meeting-id');
         currentDetailId = detailId;
 
-        // 查找明细数据 
+        // 查找明细数据
         const meetingsData = <?php echo json_encode($minutes['items']); ?>;
         let detailData = null;
 

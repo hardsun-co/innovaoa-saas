@@ -24,8 +24,8 @@ if (!empty($_GET['meeting_id']) && is_numeric($_GET['meeting_id']) && $_GET['mee
   $minuteItem = [];
 }
 
-$detailApi = 'http://innovaoaloc.cn/apps/Meeting-minutes/test/example/detailapi.php';
-$minuteApi = 'http://innovaoaloc.cn/apps/Meeting-minutes/test/example/minuteapi.php';
+$detailApi = '/innonew/hsapp/apps/meeting-minutes/test/example/api/detail.php';
+$minuteApi = '/innonew/hsapp/apps/meeting-minutes/test/example/api/minute.php';
 $pageAction = $meeting_id > 0 ? '编辑' : '新建';
 ?>
 
@@ -255,7 +255,7 @@ $pageAction = $meeting_id > 0 ? '编辑' : '新建';
     }
 
     /* 修复关闭按钮样式 */
-    .hs-close, 
+    .hs-close,
     .close {
       float: right;
       font-size: 21px;
@@ -270,7 +270,7 @@ $pageAction = $meeting_id > 0 ? '编辑' : '新建';
       cursor: pointer;
     }
 
-    .hs-close:hover, 
+    .hs-close:hover,
     .close:hover {
       opacity: .5;
       text-decoration: none;
