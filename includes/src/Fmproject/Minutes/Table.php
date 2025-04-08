@@ -3,7 +3,7 @@
  * @Description: 
  * @Author: pjw@hardsun
  * @Date: 2025-04-03 10:15:03
- * @LastEditTime: 2025-04-07 12:04:37
+ * @LastEditTime: 2025-04-08 16:18:38
  * @LastEditors: pjw@hardsun
  * @FilePath: \Innovaoa\includes\src\Fmproject\Minutes\table.php
  * @Copyright: Copyright©2019-2025 HARDSUN TECH Ltd
@@ -77,17 +77,48 @@ class Table extends \Hs\Data\Msdb\Common
           $args['query'][$key] = $params[$key];
         }
       }
+      if(!empty($params['search'])||!empty($params['s'])){ 
+        $searchKey = !empty($params['s']) ? $params['s'] : $params['search'];
+        $params['combinatorial'][] = [
+          [
+            'key' => 'title',
+            'value' => "'%" . $searchKey . "%'",
+            'compare' => 'like'
+          ],
+          [
+            'key' => 'theme',
+            'value' => "'%" . $searchKey . "%'",
+            'compare' => 'like'
+          ],
+          [
+            'key' => 'host',
+            'value' => "'%" . $searchKey . "%'",
+            'compare' => 'like'
+          ],
+          [
+            'key' => 'recorder',
+            'value' => "'%" . $searchKey . "%'",
+            'compare' => 'like'
+          ],
+        ];
+        unset($params['s']);
+        unset($params['search']);
+      }
+
+      //时间范围查询
+
+
 
       $args['paged'] = $params['paged'];
       $args['posts_per_page'] = $params['per_page'];
-      $args['combinatorial'] = !empty($params['combinatorial']) && is_array($params['combinatorial']) ? $params['combinatorial'] : [];
+      $args['query']['combinatorial'] = !empty($params['combinatorial']) && is_array($params['combinatorial']) ? $params['combinatorial'] : [];
       // $args['date_query'] = $params['date_range'];
       $args['orderby'] = $params['orderby'];
       $args['order'] = $params['order'];
       $paged = $args['paged'];
       $per_page = $args['posts_per_page'];
       $sql = fm_prepare_sql($args, $this->dataTypeSets(), $this->table_name);
-
+      // hs_ve($sql);
       $items = $this->msdb->getResults($sql);
       // var_export($items);
       if (false === $items) {
