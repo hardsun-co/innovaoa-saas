@@ -32,7 +32,7 @@ class Detail extends \Hs\Data\Msdb\Common
     //引入数据库类
     $this->msdb = \Hs\Msdb\Index::getInstance();
     //初始化表名
-    $this->table_name = 'FM_model_meeting_minutes_detail';
+    $this->table_name = 'FM_modal_meeting_minutes_detail';
     //引入主表名
     $this->main_table_name = 'FM_modal_meeting_minutes';
     //初始化

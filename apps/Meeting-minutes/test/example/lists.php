@@ -27,8 +27,8 @@ $minutes = $minuteIndex->getItems($params);
 $total = isset($minutes['total']) ? intval($minutes['total']) : (isset($minutes['items']) ? count($minutes['items']) : 0);
 $total_pages = $minutes['max_pages'];
 
-$detailApi = 'http://innovaoaloc.cn/apps/Meeting-minutes/test/example/detailapi.php';
-$minuteApi = 'http://innovaoaloc.cn/apps/Meeting-minutes/test/example/minuteapi.php';
+$detailApi = 'http://innovaoaloc.cn/apps/meeting-minutes/test/example/detailapi.php';
+$minuteApi = 'http://innovaoaloc.cn/apps/meeting-minutes/test/example/minuteapi.php';
 ?>
 
 <!DOCTYPE html>

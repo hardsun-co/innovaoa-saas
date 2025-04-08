@@ -3,7 +3,7 @@
  * @Description: 定义-公共部分
  * @Author: groupshop@com
  * @Date: 2021-07-03 21:26:14
- * @LastEditTime: 2025-04-03 08:48:08
+ * @LastEditTime: 2025-04-07 17:12:35
  * @LastEditors: pjw@hardsun
  * @File: /includes/config/defines-common.php
  * @Copyright: Copyright© 2019-2021 groupshop Ltd
@@ -80,47 +80,47 @@ if (!defined('SERVER_IP_INNER')) {
 
 // == AWS
 if (!defined('AWS_DOMAIN')) {
-  define('AWS_DOMAIN', $projectConfig['aws']['domain']);
+  define('AWS_DOMAIN', '');
 }
 if (!defined('AWS_REGION')) {
-  define('AWS_REGION', $projectConfig['aws']['region']);
+  define('AWS_REGION', '');
 }
 if (!defined('AWS_REGION_SHORT')) {
-  define('AWS_REGION_SHORT', $projectConfig['aws']['regionShort']);
+  define('AWS_REGION_SHORT', '');
 }
 if (!defined('AWS_PROFILE')) {
-  define('AWS_PROFILE', $projectConfig['aws']['profile']);
+  define('AWS_PROFILE', '');
 }
 if (!defined('AWS_REGION_ENV')) {
-  define('AWS_REGION_ENV', $awsConfigEnv['region']);
+  define('AWS_REGION_ENV', '');
 }
 if (!defined('AWS_ACCOUNT_ID')) {
-  define('AWS_ACCOUNT_ID', $projectConfig['aws']['id']);
+  define('AWS_ACCOUNT_ID', '');
 }
 if (!defined('AWS_ACCOUNT_ID_ENV')) {
-  define('AWS_ACCOUNT_ID_ENV',  $awsConfigEnv['id']);
+  define('AWS_ACCOUNT_ID_ENV',  '');
 }
 if (!defined('AWS_REGION_ENV_SHORT')) {
-  define('AWS_REGION_ENV_SHORT', $awsConfigEnv['regionShort']);
+  define('AWS_REGION_ENV_SHORT', '');
 }
 
 if (!defined('AWS_ACCOUNT_ID')) {
-  define('AWS_ACCOUNT_ID', $projectConfig['aws']['id']);
+  define('AWS_ACCOUNT_ID', '');
 }
 
 if (!defined('AWS_REGION_TRANSLATE')) {
   define('AWS_REGION_TRANSLATE', 'us-west-2');
 }
 if (!defined('AWS_PROFILE_ENV')) {
-  define('AWS_PROFILE_ENV', $awsConfigEnv['profile']);
+  define('AWS_PROFILE_ENV','');
 }
 
 // - S3
 if (!defined('S3_BUCKET_NAME')) {
-  define('S3_BUCKET_NAME', $projectConfig['aws']['bucketName']);
+  define('S3_BUCKET_NAME', '');
 }
 if (!defined('S3_BUCKET_NAME_ENV')) {
-  define('S3_BUCKET_NAME_ENV', $awsConfigEnv['bucketName']);
+  define('S3_BUCKET_NAME_ENV', '');
 }
 
 

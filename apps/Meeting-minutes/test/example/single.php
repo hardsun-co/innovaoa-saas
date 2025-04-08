@@ -22,10 +22,10 @@ if(!empty($_GET['meeting_id']) && is_numeric($_GET['meeting_id']) && $_GET['meet
   $minuteItem = [];
 }
 
-$detailApi = MAIN_DOMAIN_COMMON.'/apps/Meeting-minutes/test/example/detailapi.php';
-$minuteApi = MAIN_DOMAIN_COMMON.'/apps/Meeting-minutes/test/example/minuteapi.php';
-// $detailApi = 'http://innovaoaloc.cn/apps/Meeting-minutes/test/example/detailapi.php';
-// $minuteApi = 'http://innovaoaloc.cn/apps/Meeting-minutes/test/example/minuteapi.php';
+// $detailApi = MAIN_DOMAIN_COMMON.'/apps/meeting-minutes/test/example/detailapi.php';
+// $minuteApi = MAIN_DOMAIN_COMMON.'/apps/meeting-minutes/test/example/minuteapi.php';
+$detailApi = 'http://innovaoaloc.cn/apps/Meeting-minutes/test/example/detailapi.php';
+$minuteApi = 'http://innovaoaloc.cn/apps/Meeting-minutes/test/example/minuteapi.php';
 $pageAction = $meeting_id > 0 ? '编辑' : '新建';
 ?>
 
