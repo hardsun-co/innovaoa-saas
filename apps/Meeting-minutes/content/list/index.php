@@ -31,8 +31,11 @@ $total_pages = $minutes['max_pages'];
 
 $detailApi = '/innonew/hsapp/apps/meeting-minutes/api/detail.php';
 $minuteApi = '/innonew/hsapp/apps/meeting-minutes/api/minute.php';
+$pageNewPath = '/innonew/hsapp/apps/meeting-minutes/content/new/index.php';
+$pageUpdatePath = '/innonew/hsapp/apps/meeting-minutes/content/update/index.php';
 
 require_once dirname(__DIR__, 1) . '/inc/header.php';
+
 ?>
 
 <body>
@@ -43,7 +46,7 @@ require_once dirname(__DIR__, 1) . '/inc/header.php';
         <h2>会议记录管理</h2>
       </div>
       <div class="hs-header-actions">
-        <a href="single.php" class="hs-btn hs-btn-primary">
+        <a href="<?php echo $pageNewPath; ?>" class="hs-btn hs-btn-primary">
           <i class="fa fa-plus hs-margin-right-5"></i> 新建会议
         </a>
       </div>
@@ -82,7 +85,7 @@ require_once dirname(__DIR__, 1) . '/inc/header.php';
                     <td><?php echo htmlspecialchars($meeting['host']); ?></td>
                     <td>
                       <div class="hs-flex">
-                        <a href="single.php?meeting_id=<?php echo $meeting['id']; ?>" class="hs-btn hs-btn-sm hs-btn-primary hs-margin-right-5" title="编辑">
+                        <a href="<?php echo $pageUpdatePath; ?>?meeting_id=<?php echo $meeting['id']; ?>" class="hs-btn hs-btn-sm hs-btn-primary hs-margin-right-5" title="编辑">
                           <i class="fas fa-edit"></i>
                         </a>
                         <button class="hs-btn hs-btn-sm hs-btn-danger delete-meeting-btn" data-meeting-id="<?php echo $meeting['id']; ?>" title="删除">

@@ -24,8 +24,10 @@ if (!empty($_GET['meeting_id']) && is_numeric($_GET['meeting_id']) && $_GET['mee
   $minuteItem = [];
 }
 
-$detailApi = '/innonew/hsapp/apps/meeting-minutes/test/example/api/detail.php';
-$minuteApi = '/innonew/hsapp/apps/meeting-minutes/test/example/api/minute.php';
+$detailApi = '/innonew/hsapp/apps/meeting-minutes/api/detail.php';
+$minuteApi = '/innonew/hsapp/apps/meeting-minutes/api/minute.php';
+$pageUpdateApi = '/innonew/hsapp/apps/meeting-minutes/content/update/index.php';
+$pageListApi = '/innonew/hsapp/apps/meeting-minutes/content/list/index.php';
 $pageAction = $meeting_id > 0 ? '编辑' : '新建';
 
 require_once 'inc/header.php';
@@ -38,7 +40,7 @@ require_once 'inc/header.php';
         <h2><?php echo $pageAction; ?>会议记录</h2>
       </div>
       <div class="hs-header-actions">
-        <a href="lists.php" class="hs-btn hs-btn-default">
+        <a href="<?php echo $pageListApi; ?>" class="hs-btn hs-btn-default">
           <i class="fa fa-arrow-left hs-margin-right-5"></i> 返回列表
         </a>
       </div>
@@ -401,11 +403,11 @@ require_once 'inc/header.php';
               if (formData.action === 'create') {
                 if (result.data && result.data.id) {
                   setTimeout(() => {
-                    window.location.href = `index.php?meeting_id=${result.data.id}`;
+                    window.location.href = `<?php echo $pageUpdateApi; ?>?meeting_id=${result.data.id}`;
                   }, 1000);
                 } else if (result.id) {
                   setTimeout(() => {
-                    window.location.href = `index.php?meeting_id=${result.id}`;
+                    window.location.href = `<?php echo $pageUpdateApi; ?>?meeting_id=${result.id}`;
                   }, 1000);
                 }
               } else if (formData.action === 'update') {
