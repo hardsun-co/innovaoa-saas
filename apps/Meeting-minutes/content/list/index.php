@@ -15,11 +15,41 @@ $minuteIndex = Minutes\Index::getInstance();
 // 分页参数处理
 $paged = !empty($_GET['paged']) && is_numeric($_GET['paged']) && $_GET['paged'] > 0 ? intval($_GET['paged']) : 1; // 当前页码
 $per_page = !empty($_GET['per_page']) && is_numeric($_GET['per_page']) ? intval($_GET['per_page']) : 10; // 每页显示的记录数
+$startTime = !empty($_GET['start_time']) ? $_GET['start_time'] : ''; // 开始时间
+$endTime = !empty($_GET['end_time']) ? $_GET['end_time'] : date('Y-m-d'); // 结束时间
+$search = !empty($_GET['search']) ? $_GET['search'] : ''; // 搜索关键字
 
 $params = [
   'paged' => $paged,
   'per_page' => $per_page,
 ];
+if(!empty($startTime)&&strtotime($startTime)){
+  $startTimeRel = date('Y-m-d', strtotime($startTime)); // 格式化开始时间
+  if(!empty($endTime)&&strtotime($endTime)){
+    $endTimeRel = date('Y-m-d 23:59:59', strtotime($endTime)); // 结束时间
+  }else{
+    $endTimeRel = date('Y-m-d 23:59:59'); // 结束时间
+  }
+  $params['date'] = [
+    'key' => 'date',
+    'value' => [$startTimeRel,$endTimeRel],
+    'compare' => 'BETWEEN'
+  ];
+}else{
+  if(!empty($endTime)&&strtotime($endTime)){
+    $endTimeRel = date('Y-m-d 23:59:59', strtotime($endTime)); // 结束时间
+  }else{
+    $endTimeRel = date('Y-m-d 23:59:59'); // 结束时间
+  }
+  $params['date'] = [
+    'key' => 'date',
+    'value' => "'".$endTimeRel."'",
+    'compare' => '<='
+  ];
+}
+if(!empty($search)){
+  $params['s'] = $search; // 搜索关键字
+}
 $minutes = $minuteIndex->getItems($params);
 
 // 调试输出API返回内容
@@ -49,6 +79,45 @@ require_once dirname(__DIR__, 1) . '/inc/header.php';
         <a href="<?php echo $pageNewPath; ?>" class="hs-btn hs-btn-primary">
           <i class="fa fa-plus hs-margin-right-5"></i> 新建会议
         </a>
+      </div>
+    </div>
+
+    <!-- 添加搜索筛选区域 -->
+    <div class="hs-panel hs-panel-default hs-margin-bottom-20">
+      <div class="hs-panel-body">
+        <form method="GET" class="hs-form-inline" id="search-form">
+          <div class="hs-row">
+            <div class="hs-col-lg-8">
+              <div class="hs-form-group hs-margin-right-15">
+                <label class="hs-control-label hs-margin-right-10">时间范围:</label>
+                <input type="date" name="start_time" class="hs-form-control" style="width:160px;" 
+                  value="<?php echo htmlspecialchars($startTime); ?>" placeholder="开始日期">
+                <span class="hs-margin-left-5 hs-margin-right-5">至</span>
+                <input type="date" name="end_time" class="hs-form-control" style="width:160px;" 
+                  value="<?php echo htmlspecialchars($endTime); ?>" placeholder="结束日期">
+              </div>
+            </div>
+            <div class="hs-col-lg-4">
+              <div class="hs-form-group">
+                <div class="hs-input-group">
+                  <input type="text" name="search" class="hs-form-control" placeholder="输入关键词搜索..." 
+                    value="<?php echo htmlspecialchars($search); ?>">
+                  <input type="hidden" name="per_page" value="<?php echo $per_page; ?>">
+                  <span class="hs-input-group-btn">
+                    <button class="hs-btn hs-btn-primary" type="submit">
+                      <i class="fa fa-search"></i> 搜索
+                    </button>
+                    <?php if(!empty($search) || !empty($startTime) || !empty($endTime)): ?>
+                    <a href="?per_page=<?php echo $per_page; ?>" class="hs-btn hs-btn-default">
+                      <i class="fa fa-times"></i> 清除
+                    </a>
+                    <?php endif; ?>
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </form>
       </div>
     </div>
 
@@ -231,7 +300,7 @@ require_once dirname(__DIR__, 1) . '/inc/header.php';
                   <ul class="hs-pagination">
                     <!-- 上一页 -->
                     <li class="<?php echo $paged <= 1 ? 'disabled' : ''; ?>">
-                      <a href="<?php echo $paged <= 1 ? 'javascript:void(0)' : '?paged=' . ($paged - 1) . '&per_page=' . $per_page; ?>">
+                      <a href="<?php echo $paged <= 1 ? 'javascript:void(0)' : '?paged=' . ($paged - 1) . '&per_page=' . $per_page . '&start_time=' . urlencode($startTime) . '&end_time=' . urlencode($endTime) . '&search=' . urlencode($search); ?>">
                         <span>&laquo;</span>
                       </a>
                     </li>
@@ -251,9 +320,15 @@ require_once dirname(__DIR__, 1) . '/inc/header.php';
                       $start_page = max(1, $total_pages - 4);
                     }
 
+                    // 构建查询参数
+                    $query_params = '&per_page=' . $per_page;
+                    if(!empty($startTime)) $query_params .= '&start_time=' . urlencode($startTime);
+                    if(!empty($endTime)) $query_params .= '&end_time=' . urlencode($endTime);
+                    if(!empty($search)) $query_params .= '&search=' . urlencode($search);
+
                     // 第一页
                     if ($start_page > 1) {
-                      echo '<li><a href="?paged=1&per_page=' . $per_page . '">1</a></li>';
+                      echo '<li><a href="?paged=1' . $query_params . '">1</a></li>';
                       if ($start_page > 2) {
                         echo '<li class="disabled"><span>...</span></li>';
                       }
@@ -262,7 +337,7 @@ require_once dirname(__DIR__, 1) . '/inc/header.php';
                     // 页码
                     for ($i = $start_page; $i <= $end_page; $i++) {
                       $active = $i == $paged ? 'active' : '';
-                      echo '<li class="' . $active . '"><a href="?paged=' . $i . '&per_page=' . $per_page . '">' . $i . '</a></li>';
+                      echo '<li class="' . $active . '"><a href="?paged=' . $i . $query_params . '">' . $i . '</a></li>';
                     }
 
                     // 最后一页
@@ -270,13 +345,13 @@ require_once dirname(__DIR__, 1) . '/inc/header.php';
                       if ($end_page < $total_pages - 1) {
                         echo '<li class="disabled"><span>...</span></li>';
                       }
-                      echo '<li><a href="?paged=' . $total_pages . '&per_page=' . $per_page . '">' . $total_pages . '</a></li>';
+                      echo '<li><a href="?paged=' . $total_pages . $query_params . '">' . $total_pages . '</a></li>';
                     }
                     ?>
 
                     <!-- 下一页 -->
                     <li class="<?php echo $paged >= $total_pages ? 'disabled' : ''; ?>">
-                      <a href="<?php echo $paged >= $total_pages ? 'javascript:void(0)' : '?paged=' . ($paged + 1) . '&per_page=' . $per_page; ?>">
+                      <a href="<?php echo $paged >= $total_pages ? 'javascript:void(0)' : '?paged=' . ($paged + 1) . $query_params; ?>">
                         <span>&raquo;</span>
                       </a>
                     </li>
@@ -445,7 +520,17 @@ require_once dirname(__DIR__, 1) . '/inc/header.php';
       // 每页显示数量变化时
       $('#perPageSelect').on('change', function() {
         const perPage = $(this).val();
-        window.location.href = `?paged=1&per_page=${perPage}`;
+        // 保留现有的查询参数
+        const startTime = '<?php echo urlencode($startTime); ?>';
+        const endTime = '<?php echo urlencode($endTime); ?>';
+        const search = '<?php echo urlencode($search); ?>';
+        
+        let url = `?paged=1&per_page=${perPage}`;
+        if(startTime) url += `&start_time=${startTime}`;
+        if(endTime) url += `&end_time=${endTime}`;
+        if(search) url += `&search=${search}`;
+        
+        window.location.href = url;
       });
 
       // 展开/收起会议明细 - 修复点击事件
