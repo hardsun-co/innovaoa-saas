@@ -3,9 +3,9 @@
  * @Description: 
  * @Author: pjw@hardsun
  * @Date: 2025-04-03 10:09:08
- * @LastEditTime: 2025-04-08 16:10:15
+ * @LastEditTime: 2025-04-08 17:48:34
  * @LastEditors: pjw@hardsun
- * @FilePath: \Innovaoa\apps\Meeting-minutes\test\test.php
+ * @FilePath: \hsapp\apps\meeting-minutes\test\test.php
  * @Copyright: Copyright©2019-2025 HARDSUN TECH Ltd
  */
 
@@ -13,17 +13,19 @@
 require_once '../../../common/common.php';
 
 use Hs\Msdb;
-use Hs\Fmproject\Minutes;
+$msdb = Msdb\Index::getInstance();
+// var_dump($msdb->tableExists('adad'));
+// use Hs\Fmproject\Minutes;
 
-$minuteTable = new Minutes\Table();
-$minuteDetail = new Minutes\Detail();
-$minuteIndex = Minutes\Index::getInstance();
+// $minuteTable = new Minutes\Table();
+// $minuteDetail = new Minutes\Detail();
+// $minuteIndex = Minutes\Index::getInstance();
 
-$params = [
-  's' => '叶子'
-];
-$minuteIndex->getItems($params);
-hs_ve($minuteIndex->getItems($params));
+// $params = [
+//   's' => '叶子'
+// ];
+// $minuteIndex->getItems($params);
+// hs_ve($minuteIndex->getItems($params));
 
 exit;
 
