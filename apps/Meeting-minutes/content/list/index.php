@@ -29,10 +29,10 @@ $minutes = $minuteIndex->getItems($params);
 $total = isset($minutes['total']) ? intval($minutes['total']) : (isset($minutes['items']) ? count($minutes['items']) : 0);
 $total_pages = $minutes['max_pages'];
 
-$detailApi = '/innonew/hsapp/apps/meeting-minutes/api/detail.php';
-$minuteApi = '/innonew/hsapp/apps/meeting-minutes/api/minute.php';
-$pageNewPath = '/innonew/hsapp/apps/meeting-minutes/content/new/index.php';
-$pageUpdatePath = '/innonew/hsapp/apps/meeting-minutes/content/update/index.php';
+$detailApi = FM_PERFIX_PATH . 'hsapp/apps/meeting-minutes/api/detail.php';
+$minuteApi = FM_PERFIX_PATH . 'hsapp/apps/meeting-minutes/api/minute.php';
+$pageNewPath = FM_PERFIX_PATH . 'hsapp/apps/meeting-minutes/content/new/index.php';
+$pageUpdatePath = FM_PERFIX_PATH . 'hsapp/apps/meeting-minutes/content/update/index.php';
 
 require_once dirname(__DIR__, 1) . '/inc/header.php';
 

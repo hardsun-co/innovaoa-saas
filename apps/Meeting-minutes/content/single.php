@@ -24,10 +24,10 @@ if (!empty($_GET['meeting_id']) && is_numeric($_GET['meeting_id']) && $_GET['mee
   $minuteItem = [];
 }
 
-$detailApi = '/innonew/hsapp/apps/meeting-minutes/api/detail.php';
-$minuteApi = '/innonew/hsapp/apps/meeting-minutes/api/minute.php';
-$pageUpdateApi = '/innonew/hsapp/apps/meeting-minutes/content/update/index.php';
-$pageListApi = '/innonew/hsapp/apps/meeting-minutes/content/list/index.php';
+$detailApi = FM_PERFIX_PATH . 'hsapp/apps/meeting-minutes/api/detail.php';
+$minuteApi = FM_PERFIX_PATH . 'hsapp/apps/meeting-minutes/api/minute.php';
+$pageUpdateApi = FM_PERFIX_PATH . 'hsapp/apps/meeting-minutes/content/update/index.php';
+$pageListApi = FM_PERFIX_PATH . 'hsapp/apps/meeting-minutes/content/list/index.php';
 $pageAction = $meeting_id > 0 ? '编辑' : '新建';
 
 require_once 'inc/header.php';
